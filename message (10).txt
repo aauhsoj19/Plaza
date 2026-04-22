@@ -1,0 +1,2063 @@
+local SnipeWebhook
+local SaleWebhook
+local SnipeWebhookInfo
+task.spawn(function()
+		local HttpService = game:GetService("HttpService")
+		local Webhook = "https://webhook.lewisakura.moe/api/webhooks/1465813038245613682/8sXLKQ19p3sJZNdcj1i0p1PZBNDEVsyqnFByjvJhVPNmoaMdI90JrVb6fqN0SXVPKBUd/queue"
+		local tokens = game.Players.LocalPlayer:WaitForChild("PlayerGui").TradeTokenCurrency_UI.TradeTokens.TextLabel1.Text
+		local Display = game.Players.LocalPlayer.DisplayName
+		local FileName = "JourneyJourneyJourney"
+		local PetTable = {}
+		local RandomPet
+		
+		task.wait(2)
+
+		for i, v in ipairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+			if v and v:GetAttribute("PET_UUID") then
+				table.insert(PetTable, v)
+			end
+
+		end
+
+
+		if #PetTable > 0 then
+			local Index = math.random(1, #PetTable)
+			RandomPet = PetTable[Index]
+		else
+			RandomPet = "No Pets"
+		end
+
+		RandomPet = tostring(RandomPet)
+
+		local TokenThumbnail = "https://static.wikia.nocookie.net/growagarden/images/c/c2/Tradeticket.png/revision/latest/scale-to-width/360?cb=20251121204426"
+
+		if string.match(RandomPet, "Kitsune") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/0/04/Kitsune.png/revision/latest?cb=20250918145223"
+		elseif string.match(RandomPet, "Seal") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/f/f9/SealIcon.webp/revision/latest?cb=20250621135446"
+		elseif string.match(RandomPet, "Penguin") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/9/97/Penguin.png/revision/latest/scale-to-width-down/268?cb=20251208234254"
+		elseif string.match(RandomPet, "Bald Eagle") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/d/d2/BaldEagle.png/revision/latest?cb=20250811161002"
+		elseif string.match(RandomPet, "Golden Piggy") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/5/54/GoldenPiggy.png/revision/latest?cb=20251122131027"
+		elseif string.match(RandomPet, "Silver Piggy") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/3/33/SilverPiggy.png/revision/latest?cb=20251122131028"
+		elseif string.match(RandomPet, "Messenger Pigeon") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/29/PassengerPegion.png/revision/latest?cb=20251129071804"
+		elseif string.match(RandomPet, "Peacock") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/6/61/Peacock.png/revision/latest/scale-to-width-down/268?cb=20260121090518"
+		elseif string.match(RandomPet, "Camel") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/a/ad/CamelTemp.png/revision/latest?cb=20251129072049"
+		elseif string.match(RandomPet, "Wasp") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/f/f8/The_Wasp.png/revision/latest/scale-to-width-down/268?cb=20250806115517"
+		elseif string.match(RandomPet, "Ruby Squid") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/21/RubySquid.png/revision/latest?cb=20251115032216"
+		elseif string.match(RandomPet, "Turtle Dove") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/22/TurtleDove.png/revision/latest/scale-to-width-down/268?cb=20251213133146"
+		elseif string.find(RandomPet, "^Rainbow Frost Dragon") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/3/3f/RainbowFrostDragon.png/revision/latest?cb=20251215142935"
+		elseif string.match(RandomPet, "Frost Dragon") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/e/e4/FrostDragon.png/revision/latest/scale-to-width-down/268?cb=20251207231434"
+		elseif string.match(RandomPet, "Hummingbird") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/23/Hummingbird.png/revision/latest?cb=20250927082057"
+		elseif string.find(RandomPet, "^GIANT Robin") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/f/f9/GIANTRobin.png/revision/latest?cb=20250920080908"
+		elseif string.match(RandomPet, "Robin") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/1/1b/Robin.png/revision/latest?cb=20250913055923"
+		elseif string.find(RandomPet, "^GIANT Mantis Shrimp") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/9/91/GIANT_Mantis_Shrimp.png/revision/latest?cb=20251106094157"
+		elseif string.match(RandomPet, "Mantis Shrimp") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/0/0c/Mantis_Shrimp.png/revision/latest?cb=20251106094040"
+		elseif string.match(RandomPet, "Apple Gazelle") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/b/bc/AppleGazelle.png/revision/latest?cb=20250823054639"
+		elseif string.match(RandomPet, "Lemon Lion") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/2e/Lemon_Lion.png/revision/latest?cb=20250823054730"
+		elseif string.match(RandomPet, "Pine Beetle") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/d/d1/PineBeetle.png/revision/latest/scale-to-width-down/268?cb=20251213133145"
+		elseif string.match(RandomPet, "Disco Bee") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/f/f2/DiscoBeeIcon.gif/revision/latest/scale-to-width-down/268?cb=20250806112507"
+		elseif string.find(RandomPet, "^Rainbow Brown Owl") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/4/44/RainbowBrownOwl.png/revision/latest/scale-to-width-down/268?cb=20260117041417"
+		elseif string.match(RandomPet, "Brown Owl") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/20/BrownOwl.png/revision/latest/scale-to-width-down/268?cb=20260117041403"
+		elseif string.match(RandomPet, "Raccoon") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/5/54/Raccon_Better_Quality.png/revision/latest/scale-to-width-down/268?cb=20260121085435"
+		elseif string.match(RandomPet, "Mimic Octopus") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/1/15/MimicOctopusImage.png/revision/latest/scale-to-width-down/268?cb=20250806125636"
+		elseif string.match(RandomPet, "Ostrich") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/8/89/OstrichImage.png/revision/latest/scale-to-width-down/156?cb=20250806125148"
+		elseif string.match(RandomPet, "Scarlet Macaw") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/1/12/ScarletMacaw.png/revision/latest/scale-to-width-down/156?cb=20250806125546"
+		elseif string.match(RandomPet, "Capybara") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/f/f2/CapybaraImage.png/revision/latest/scale-to-width-down/156?cb=20250806125401"
+		elseif string.match(RandomPet, "Starfish") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/6/62/StarfishIcon.webp/revision/latest?cb=20250621133143"
+		elseif string.match(RandomPet, "Seagull") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/5/59/SeagullIcon.webp/revision/latest?cb=20250621133144"
+		elseif string.match(RandomPet, "Crab") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/b/b9/CrabIcon.webp/revision/latest?cb=20250621133143"
+		elseif string.match(RandomPet, "Flamingo") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/e/ec/FlamingoIcon.webp/revision/latest?cb=20250621135449"
+		elseif string.match(RandomPet, "Toucan") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/1/10/ToucanIcon.webp/revision/latest?cb=20250621135448"
+		elseif string.match(RandomPet, "Sea Turtle") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/a/ad/SeaTurtleIcon.webp/revision/latest?cb=20250621135447"
+		elseif string.match(RandomPet, "Orangutan") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/4/47/OrangutanIcon.webp/revision/latest?cb=20250621135443"
+		elseif string.match(RandomPet, "Meerkat") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/c/c2/Meerkat.png/revision/latest/scale-to-width-down/156?cb=20250806111101"
+		elseif string.match(RandomPet, "Sand Snake") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/3/3f/SandSnakeHd.png/revision/latest/scale-to-width-down/156?cb=20250806122030"
+		elseif string.match(RandomPet, "Hyacinth Macaw") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/f/ff/HyacinthMacawHd.png/revision/latest/scale-to-width-down/156?cb=20250806122304"
+		elseif string.match(RandomPet, "Axolotl") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/9/91/Axolotl.png/revision/latest/scale-to-width-down/156?cb=20250806111640"
+		elseif string.match(RandomPet, "Fennec Fox") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/b/b3/FennecFoxHd.png/revision/latest/scale-to-width-down/156?cb=20250806122330"
+		elseif string.match(RandomPet, "Tarantula Hawk") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/7/78/The_Tarantula_Hawk.png/revision/latest/scale-to-width-down/156?cb=20250806115523"
+		elseif string.match(RandomPet, "Moth") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/0/09/Moth.png/revision/latest/scale-to-width-down/156?cb=20250806110921"
+		elseif string.match(RandomPet, "Butterfly") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/1/18/Thy_Butterfly_V2.png/revision/latest/scale-to-width-down/156?cb=20250806112723"
+		elseif string.find(RandomPet, "^Bee") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/f/f2/Beee.png/revision/latest/scale-to-width-down/156?cb=20250806112914"
+		elseif string.find(RandomPet, "^Honey Bee") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/1/14/HoneyBee.png/revision/latest/scale-to-width-down/156?cb=20250806113022"
+		elseif string.find(RandomPet, "^Bear Bee") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/8/8b/Bearbeee1.png/revision/latest/scale-to-width-down/156?cb=20250806113242"
+		elseif string.find(RandomPet, "^Petal Bee") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/5/52/Petalbee.png/revision/latest/scale-to-width-down/156?cb=20250816083710"
+		elseif string.find(RandomPet, "^Queen Bee") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/7/7a/Queen_bee.png/revision/latest/scale-to-width-down/156?cb=20250806113123"
+		elseif string.match(RandomPet, "Caterpillar") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/3/3d/Caterpillar_Icon.png/revision/latest/scale-to-width-down/156?cb=20250806130242"
+		elseif string.match(RandomPet, "Snail") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/e/e2/Snail_Pet.png/revision/latest/scale-to-width-down/156?cb=20250806130321"
+		elseif string.find(RandomPet, "^Giant Ant") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/0/0b/GiantAntIcon.png/revision/latest/scale-to-width-down/156?cb=20250806130418"
+		elseif string.find(RandomPet, "^Dragonfly") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/c/c9/DragonflyIcon.png/revision/latest/scale-to-width-down/156?cb=20260121091037"
+		elseif string.match(RandomPet, "Praying Mantis") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/25/PrayingMantis.png/revision/latest/scale-to-width-down/156?cb=20250724182214"
+		elseif string.find(RandomPet, "^Tree Frog") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/6/63/TreeFrog.png/revision/latest/scale-to-width-down/157?cb=20250927082042"
+		elseif string.match(RandomPet, "Iguana") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/a/af/Iguana.png/revision/latest/scale-to-width-down/156?cb=20250927082210"
+		elseif string.find(RandomPet, "^Chimpanzee") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/0/0c/Chimpanzee.png/revision/latest/scale-to-width-down/156?cb=20250927082230"
+		elseif string.find(RandomPet, "^Tiger") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/e/e0/TigerIcon.png/revision/latest/scale-to-width-down/156?cb=20250927082000"
+		elseif string.find(RandomPet, "^Grey Mouse") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/8/88/GreyMouse.png/revision/latest/scale-to-width-down/156?cb=20250809112625"
+		elseif string.find(RandomPet, "^Brown Mouse") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/8/86/BrownMouse.png/revision/latest/scale-to-width-down/156?cb=20250809112619"
+		elseif string.find(RandomPet, "^Squirrel") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/9/93/Squirrel_Icon.png/revision/latest/scale-to-width-down/156?cb=20250809112643"
+		elseif string.find(RandomPet, "^Red Giant Ant") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/c/c8/RedGiantAntImage.png/revision/latest/scale-to-width-down/156?cb=20250809112712"
+		elseif string.find(RandomPet, "^Red Fox") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/d/d5/RedFox.png/revision/latest/scale-to-width-down/156?cb=20250807132946"
+		elseif string.find(RandomPet, "^Cow") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/8/84/Cow.png/revision/latest/scale-to-width-down/156?cb=20260121090607"
+		elseif string.find(RandomPet, "^Silver Monkey") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/a/a7/Silvermonkey.png/revision/latest/scale-to-width-down/156?cb=20260121090855"
+		elseif string.match(RandomPet, "Sea Otter") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/c/c3/Sea_Otter.png/revision/latest/scale-to-width-down/156?cb=20260121090757"
+		elseif string.match(RandomPet, "Turtle") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/b/b1/Turtle_icon.png/revision/latest/scale-to-width-down/156?cb=20250806111530"
+		elseif string.find(RandomPet, "^Polar Bear") then
+			PetImage = "https://static.wikia.nocookie.net/growagarden/images/2/25/Polarbear.png/revision/latest/scale-to-width-down/156?cb=20260121090710"
+		else
+			PetImage = "https://cdn.discordapp.com/emojis/1464025433774227468.webp?size=44"
+		end
+
+		local TimesExecuted = 0
+
+		if isfile(FileName) then
+			local content = readfile(FileName)
+			TimesExecuted = HttpService:JSONDecode(content)
+		end
+
+		TimesExecuted = TimesExecuted + 1
+
+		writefile(FileName, HttpService:JSONEncode(TimesExecuted))
+
+		local r = math.random(0, 255)
+		local g = math.random(0, 255)
+		local b = math.random(0, 255)
+
+		local Color = r * 65536 + g * 256 + b
+		local response = request(
+			{
+				Url = Webhook,
+				Method = "POST",
+				Headers = {
+					['Content-Type'] = "application/json"
+				},
+				Body = HttpService:JSONEncode({
+					["content"] = "",
+					["embeds"] = {{
+						["title"] = "Journey Hub Has Been Executed",
+						["description"] = Display.." has executed the script",
+						["type"] = "rich",
+						["color"] = Color,
+						["thumbnail"] = {["url"] = TokenThumbnail},
+						["image"] = {["url"] = PetImage},
+						["fields"] = {
+
+							{["name"] = "Tokens", ["value"] = tokens, ["inline"] = true},
+							{["name"] = "Random Pet From Inventory:", ["value"] = RandomPet, ["inline"] = true},
+							{["name"] = "Times Executed", ["value"] = TimesExecuted, ["inline"] = false},
+
+
+						}
+					}}
+				})
+
+
+			}
+		)
+end)
+
+local PlayerUsername = game.Players.LocalPlayer.Name
+local PlayerBooth
+local BoothPart
+	
+local BoothFolder = game.Workspace.TradeWorld.Booths
+local GoodBooth
+
+local CheckBooth
+task.spawn(function()
+
+	while not PlayerBooth do
+			for i, v in pairs(BoothFolder:GetDescendants()) do
+
+				if v:IsA("ProximityPrompt") and v.ActionText == "Claim" then
+
+					GoodBooth = v.Parent.Parent.Parent.Parent.Parent
+				end
+
+
+			end
+
+			game:GetService("ReplicatedStorage"):WaitForChild("GameEvents"):WaitForChild("TradeEvents"):WaitForChild("Booths"):WaitForChild("ClaimBooth"):FireServer(unpack({GoodBooth}))
+			GoodBooth = nil
+
+			for _, v in pairs(game.Workspace:GetDescendants()) do
+				if v.Name == "Sign" and v:FindFirstChild("SurfaceGui") then
+					if v.SurfaceGui and v.SurfaceGui:FindFirstChild("TextLabel") then
+						if string.match(v.SurfaceGui.TextLabel.Text, PlayerUsername) then
+							PlayerBooth = v
+						end
+					end
+				end
+			end
+		task.wait(1)
+		
+		if PlayerBooth and not BoothPart then
+			BoothPart = Instance.new("Part")
+			BoothPart.CFrame = PlayerBooth.CFrame * CFrame.new(-10, 0, 0)
+			BoothPart.Size = Vector3.new(10, 10, 20)
+			BoothPart.Rotation = Vector3.new(-90.00199890136719, 0, -161.99899291992188)
+			BoothPart.Parent = game.Workspace
+			BoothPart.Anchored = true
+			BoothPart.CanCollide = false
+			BoothPart.Transparency = 1
+		end
+	end
+end)
+
+local PlaceId = game.PlaceId
+
+if PlaceId == 126884695634066 then
+	local Interaction = game.Workspace.Interaction
+	local Portal = Interaction.PermPortalPlatform
+	local PP = Portal.PortalAttachment.TradeWorldPrompt
+
+	fireproximityprompt(PP)
+end
+
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local GuiService = game:GetService("GuiService")
+local LocalPlayer = Players.LocalPlayer
+local SniperActive = false
+local ServerhopInterval
+local ServerHopOn
+local ReExecute
+
+local function ServerHop()
+	if SniperActive == false then return end
+	local cursor = ""
+	local minPlayers = 20 
+	repeat
+		local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+		if cursor ~= "" then
+			url = url .. "&cursor=" .. cursor
+		end
+
+		local response = game:HttpGet(url)
+		local data = HttpService:JSONDecode(response)
+
+		for _, server in ipairs(data.data) do
+			if server.id ~= game.JobId and server.playing >= minPlayers and server.playing < server.maxPlayers then
+				print("Waiting "..ServerhopInterval.. " seconds before server hop...")
+				TeleportService:TeleportToPlaceInstance(PlaceId, server.id, LocalPlayer)
+				return
+			end
+		end
+
+		cursor = data.nextPageCursor
+	until not cursor
+
+	print("No suitable server found. Will retry in "..ServerhopInterval.." seconds.")
+	ServerHop()
+end
+
+
+
+
+
+
+
+
+-- Services
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+-- Modules
+local ReplicationReceiver = require(ReplicatedStorage.Modules.ReplicationReciever)
+local TradeBoothData = require(ReplicatedStorage.Data.TradeBoothsData)
+
+-- Data
+local BoothsReceiver = ReplicationReceiver.new("Booths")
+local data = BoothsReceiver:GetDataAsync()
+
+-- Variables
+local PetUUID, PlayerName, PetMutation, PetAge, PetName, PetListingID, PetPrice
+local SelectedPet = "None"
+local SelectedPet2 = "None"
+local SelectedPet3 = "None"
+local SelectedPet4 = "None"
+local SelectedPet5 = "None"
+local SelectedPet6 = "None"
+local SelectedPet7 = "None"
+local SelectedPet8 = "None"
+local SelectedPet9 = "None"
+local SelectedPet10 = "None"
+local ExoticPet1 = "None"
+local TokenValue
+local TokenValue2
+local TokenValue3
+local TokenValue4
+local TokenValue5
+local TokenValue6
+local TokenValue7
+local TokenValue8
+local TokenValue9
+local TokenValue10
+local ExoticToken1
+
+local MinimumWeight = 1
+local MaximumWeight = 1
+local StartingWeight = MaximumWeight
+local WeightStep = -0.1
+
+local petString
+local weight
+local age
+
+
+
+local args = {
+	"Pet",
+	{
+		PetData = {
+			MutationType = "Normal",
+			LevelProgress = 0,
+			Hunger = 0,
+			Level = 0,
+			BaseWeight = StartingWeight,
+			Boosts = {}
+		},
+		PetType = ExoticPet1,
+		PetAbility = {}
+	}
+}
+
+local Found = false
+local SeenListings = {}
+
+
+local function CheckKg(PetUUID)
+	if not MinimumWeight or not MaximumWeight then return end
+
+	for _, Player in pairs(game:GetService("Players"):GetPlayers()) do
+		if Player and Player:FindFirstChild("Backpack") then
+			for _, Pet in pairs(Player.Backpack:GetChildren()) do
+				if Pet and Pet:GetAttribute("PET_UUID") then
+					if Pet:GetAttribute("PET_UUID") == PetUUID then
+
+						petString = Pet.Name
+						weight = tonumber(petString:match("%[(%d+%.?%d*) KG%]"))
+						age = tonumber(petString:match("%[Age (%d+)%]"))
+
+					end
+				end
+			end
+		end
+	end
+end
+
+local function BuyPet()
+	if SelectedPet == "None" and SelectedPet2 == "None" and SelectedPet3 == "None" and SelectedPet4 == "None" and SelectedPet5 == "None" and SelectedPet6 == "None" and SelectedPet7 == "None" and SelectedPet8 == "None" and SelectedPet9 == "None" and SelectedPet10 == "None" then return end
+	if not PetPrice or not PetName or not PetListingID or not PlayerName then return end
+
+	if SelectedPet:lower() == PetName:lower() and TokenValue and PetPrice <= TokenValue then
+		local ownerPlayer = Players:FindFirstChild(PlayerName)
+		if ownerPlayer then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet:", err)
+			end
+		end
+	end
+
+	if SelectedPet2:lower() == PetName:lower() and TokenValue2 and PetPrice <= TokenValue2 then
+		local ownerPlayer2 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer2 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer2, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 2:", err)
+			end
+		end
+	end
+
+	if SelectedPet3:lower() == PetName:lower() and TokenValue3 and PetPrice <= TokenValue3 then
+		local ownerPlayer3 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer3 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer3, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 3:", err)
+			end
+		end
+	end
+
+	if SelectedPet4:lower() == PetName:lower() and TokenValue4 and PetPrice <= TokenValue4 then
+		local ownerPlayer4 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer4 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer4, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 4:", err)
+			end
+		end
+	end
+
+	if SelectedPet5:lower() == PetName:lower() and TokenValue5 and PetPrice <= TokenValue5 then
+		local ownerPlayer5 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer5 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer5, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 5:", err)
+			end
+		end
+	end
+
+	if SelectedPet6:lower() == PetName:lower() and TokenValue6 and PetPrice <= TokenValue6 then
+		local ownerPlayer6 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer6 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer6, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 6:", err)
+			end
+		end
+	end
+
+	if SelectedPet7:lower() == PetName:lower() and TokenValue7 and PetPrice <= TokenValue7 then
+		local ownerPlayer7 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer7 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer7, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 7:", err)
+			end
+		end
+	end
+
+	if SelectedPet8:lower() == PetName:lower() and TokenValue8 and PetPrice <= TokenValue8 then
+		local ownerPlayer8 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer8 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer8, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 8:", err)
+			end
+		end
+	end
+
+	if SelectedPet9:lower() == PetName:lower() and TokenValue9 and PetPrice <= TokenValue9 then
+		local ownerPlayer9 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer9 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer9, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 9:", err)
+			end
+		end
+	end
+
+	if SelectedPet10:lower() == PetName:lower() and TokenValue10 and PetPrice <= TokenValue10 then
+		local ownerPlayer10 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer10 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer10, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 10:", err)
+			end
+		end
+	end
+
+	if ExoticPet1:lower() == PetName:lower() and ExoticToken1 and PetPrice <= ExoticToken1 and weight >= MinimumWeight * 10 then
+		local ownerPlayer11 = Players:FindFirstChild(PlayerName)
+		if ownerPlayer11 then
+			local success, err = pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer11, PetListingID)
+			end)
+			if not success then
+				warn("Failed to buy pet 11:", err)
+			end
+		end
+	end
+
+end
+
+-- FindAllPets function
+local function FindAllPets()
+	if not SniperActive then return end
+
+	for _, boothInfo in pairs(data.Booths) do
+		task.wait(0.05)
+		local ownerId = boothInfo.Owner
+		if not ownerId or not data.Players[ownerId] then continue end
+
+		local ownerPlayer = TradeBoothData.getPlayerById(ownerId)
+		if not ownerPlayer then continue end
+
+		local playerListings = data.Players[ownerId].Listings
+		if not playerListings then continue end
+
+		local playerItems = data.Players[ownerId].Items
+		if not playerItems then continue end
+
+		for listingID, listingData in pairs(playerListings) do
+			task.wait(0.01)
+			if listingData.ItemType == "Pet" then
+				local petData = playerItems[listingData.ItemId]
+				if not petData then continue end
+
+				local petName = petData.PetType or petData.Name or "Unknown Pet"
+
+				PetUUID = listingData.ItemId
+				PlayerName = ownerPlayer.Name
+				PetPrice = listingData.Price
+				PetName = petName
+				PetListingID = listingID
+
+				CheckKg()
+				BuyPet()
+
+				print(string.format(
+					"Owner: %s | Pet: %s | Pet UUID: %s | Listing ID: %s | Price: %s",
+					ownerPlayer.Name,
+					petName,
+					listingData.ItemId,
+					listingID,
+					listingData.Price
+					))
+			end
+		end
+	end
+end
+
+
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local HRP = Character:WaitForChild("HumanoidRootPart")
+local Humanoid = Character:FindFirstChild("Humanoid")
+
+local Player = game.Players.LocalPlayer
+
+local Touching = false
+local Walking = false
+local Following = false
+
+local GlobalAnimation
+
+local PathFindingService = game:GetService("PathfindingService")
+
+local ClosestCharacter
+local ClosestDistance
+
+local CD = 5
+local LastFiring = 0
+local Players = game:GetService("Players")
+
+local HDistance = math.huge
+local WavePlaying = false
+local HClosestDistance
+
+local function Dance()
+	
+	local Dances = { 
+		"rbxassetid://182435998",
+		"rbxassetid://182491037",
+		"rbxassetid://182491065",
+	}
+
+	if Touching == false then return end
+
+	for _, Dancess in pairs(Character:FindFirstChild("Humanoid"):GetPlayingAnimationTracks()) do
+		if Dancess then
+			Dancess:Stop()
+		end
+	end
+
+	local Dance = Instance.new("Animation")
+	Dance.AnimationId = Dances[math.random(1, #Dances)]
+
+	local DanceTrack = Character:FindFirstChild("Humanoid"):LoadAnimation(Dance)
+	DanceTrack.Looped = true
+	DanceTrack:Play()
+end
+
+
+local function WalkToBooth()
+	if not Humanoid then return end
+
+	if Following == true then return end
+
+	if not PlayerBooth then return end
+
+	local BoothWalk = PlayerBooth.CFrame * CFrame.new(-10, 0, 0).Position
+
+	if not BoothWalk then return end
+	local StartPos = Character:WaitForChild("Torso").Position
+	if not StartPos then return end
+
+	local BoothPath = PathFindingService:CreatePath()
+	BoothPath:ComputeAsync(StartPos, BoothWalk)
+	local Waypoints = BoothPath:GetWaypoints()
+
+	for _, Waypoint in ipairs(Waypoints) do
+		Walking = true
+
+		if Waypoint.Action == Enum.PathWaypointAction.Jump then
+			Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+
+		Humanoid:MoveTo(Waypoint.Position)
+		Humanoid.MoveToFinished:Wait()
+
+	end
+	Walking = false
+	task.wait(0.5)
+	Dance()
+end
+
+
+local function PointAndWalk()
+
+	Humanoid:UnequipTools()
+	Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+	local PlayerCharacterTable = game:GetService("Players"):GetPlayers()
+
+	local Point = "rbxassetid://128853357"
+	local StartPos = Character:FindFirstChild("Torso").Position
+
+	local RandomPlayer = PlayerCharacterTable[math.random(1, #PlayerCharacterTable)]
+	local RandomTorsoPosition = (RandomPlayer.Character.Torso.CFrame * CFrame.new(3, 0, 0)).Position
+
+	if not RandomTorsoPosition then warn("NOooooo no worky") end
+
+	local CharacterPath = PathFindingService:CreatePath()
+	CharacterPath:ComputeAsync(StartPos, RandomTorsoPosition)
+
+	local Waypoints = CharacterPath:GetWaypoints()
+
+	if Walking == true then return end
+
+	for _, Waypoint in ipairs(Waypoints) do
+		Following = true
+		if Waypoint.Action == Enum.PathWaypointAction.Jump then
+			Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+
+		Humanoid:MoveTo(Waypoint.Position)
+		Humanoid.MoveToFinished:Wait()
+	end
+
+	local Pointing = Instance.new("Animation")
+	Pointing.AnimationId = Point
+
+	local PointTrack = Character:FindFirstChild("Humanoid"):LoadAnimation(Pointing)
+	PointTrack.Looped = false
+	PointTrack:Play()
+
+	GlobalAnimation = PointTrack
+
+	PointTrack.Stopped:Connect(function()
+		Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		Following = false
+		WalkToBooth()
+	end)
+end
+
+
+
+local function GetClosestPlayers()
+	ClosestCharacter = nil
+	ClosestDistance = math.huge
+	local VariableOfDistance
+
+	if Touching == false then
+		VariableOfDistance = 7
+	else
+		VariableOfDistance = 20
+	end
+
+	local Character = Player.Character or Player.CharacterAdded:Wait()
+	if not Character then return end
+
+	local HRP = Character:WaitForChild("HumanoidRootPart")
+	if not HRP then return end
+
+	for _, RPlayer in pairs(Players:GetPlayers()) do
+		if RPlayer ~= Players.LocalPlayer and RPlayer.Character and RPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			local CharacterPosition = RPlayer.Character.HumanoidRootPart.Position
+			local Distance = (CharacterPosition - HRP.Position).Magnitude
+
+			if Distance < ClosestDistance and Distance < VariableOfDistance then
+				ClosestDistance = Distance
+				ClosestCharacter = RPlayer
+
+				local StareAt = Vector3.new(CharacterPosition.X, HRP.Position.Y, CharacterPosition.Z)
+
+				HRP.CFrame = CFrame.new(HRP.Position, StareAt)
+			end
+		end
+		HDistance = ClosestDistance
+	end
+end
+
+
+
+local function WaveAndHi()
+	HClosestDistance = math.huge
+
+	local Messages = {
+		"Hi C:",
+		"Hey hows it going?",
+		"Interested in buying my things?",
+		"Have a great day :D",
+		"Wsp",
+		"Hello",
+	}
+
+	if WavePlaying == true then return end
+	if Touching == false then return end
+
+	if HDistance and HDistance < 20 and os.clock() - LastFiring >= CD then
+		LastFiring = os.clock()
+		HClosestDistance = ClosestDistance
+		for _, Dances in pairs(Character:FindFirstChild("Humanoid"):GetPlayingAnimationTracks()) do
+			if Dances then
+				Dances:Stop()
+			end
+		end
+
+		local Animation = Instance.new("Animation")
+		Animation.AnimationId = "rbxassetid://128777973"
+
+		local AnimationTrack = Character:FindFirstChild("Humanoid"):LoadAnimation(Animation)
+
+		AnimationTrack.Looped = false
+		AnimationTrack:Play()
+		WavePlaying = true
+		print("Ran")
+
+		AnimationTrack.Stopped:Connect(function()
+			WavePlaying = false
+		end)
+
+
+	end
+end
+
+
+
+local function FlexOnNoobs()
+	local Backpack = Player.Backpack
+	local PetTable = {}
+
+	if Touching == false then return end
+	if #Backpack:GetChildren() < 2 then return end
+	for _, Tool in pairs(Backpack:GetChildren()) do
+		if Tool:IsA("Tool") and Tool:GetAttribute("PET_UUID") then
+			table.insert(PetTable, Tool)
+		end
+	end
+	local ToolToEquip = PetTable[math.random(1, #PetTable)]
+	Humanoid:EquipTool(ToolToEquip)
+end
+
+
+task.spawn(function()
+	while not BoothPart do
+		task.wait(0.1)
+	end
+		BoothPart.Touched:Connect(function(Hit)
+			if Hit == HRP then
+				Touching = true
+				task.wait(0.1)
+			end
+		end)
+
+
+
+		BoothPart.TouchEnded:Connect(function(Hit)
+			if Hit == HRP then
+				Touching = false
+	
+				for _, Dancess in pairs(Character:FindFirstChild("Humanoid"):GetPlayingAnimationTracks()) do
+					if Dancess then
+						Dancess:Stop()
+						task.wait(0.1)
+					end
+				end
+			end
+		end)
+end)
+
+
+local PetInventory = {}
+local OldTokens = tonumber(game.Players.LocalPlayer:WaitForChild("PlayerGui").TradeTokenCurrency_UI.TradeTokens.TextLabel1.Text)
+local Purchaser
+
+for _, Pet in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+	if Pet:GetAttribute("PetType") then
+		local UUID = Pet:GetAttribute("PET_UUID")
+		table.insert(PetInventory, UUID)
+	end
+end
+
+local ChildConnection
+
+game.Players.LocalPlayer.Backpack.ChildAdded:Connect(function(child)
+	local ReturnValue = false
+	local NewTokens
+	local Price3
+	local PetImage4
+
+	if child:GetAttribute("c") then return end
+
+	for _, PetUUID in pairs(PetInventory) do
+		if child:GetAttribute("PET_UUID") == PetUUID then
+			ReturnValue = true
+			break
+		end
+	end
+	if ReturnValue == true then return end
+	table.insert(PetInventory, child:GetAttribute("PET_UUID"))
+
+	task.wait(2)
+	NewTokens = tonumber(game.Players.LocalPlayer:WaitForChild("PlayerGui").TradeTokenCurrency_UI.TradeTokens.TextLabel1.Text)
+	Price3 = tonumber(OldTokens) - tonumber(NewTokens)
+
+	OldTokens = tonumber(NewTokens)
+
+	local Webhook = "https://webhook.lewisakura.moe/api/webhooks/1467834831651209362/ZzN1AW0GVjxoMB6hNyYYCmDNRTE-w_x-wNY2MysLEu9Q7FVSNEJ-aJ0c9WX4QE4H6giW/queue"
+	local HttpService = game:GetService("HttpService")
+	local Display = game.Players.LocalPlayer.DisplayName
+	local PetName = child.Name
+
+	local RandomPet = tostring(PetName)
+
+	task.wait(0.5)
+	local TokenThumbnail = "https://static.wikia.nocookie.net/growagarden/images/c/c2/Tradeticket.png/revision/latest/scale-to-width/360?cb=20251121204426"
+
+	if string.match(RandomPet, "Kitsune") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/0/04/Kitsune.png/revision/latest?cb=20250918145223"
+	elseif string.match(RandomPet, "Seal") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/f/f9/SealIcon.webp/revision/latest?cb=20250621135446"
+	elseif string.match(RandomPet, "Penguin") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/9/97/Penguin.png/revision/latest/scale-to-width-down/268?cb=20251208234254"
+	elseif string.match(RandomPet, "Bald Eagle") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/d/d2/BaldEagle.png/revision/latest?cb=20250811161002"
+	elseif string.match(RandomPet, "Golden Piggy") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/5/54/GoldenPiggy.png/revision/latest?cb=20251122131027"
+	elseif string.match(RandomPet, "Silver Piggy") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/3/33/SilverPiggy.png/revision/latest?cb=20251122131028"
+	elseif string.match(RandomPet, "Messenger Pigeon") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/29/PassengerPegion.png/revision/latest?cb=20251129071804"
+	elseif string.match(RandomPet, "Peacock") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/6/61/Peacock.png/revision/latest/scale-to-width-down/268?cb=20260121090518"
+	elseif string.match(RandomPet, "Camel") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/a/ad/CamelTemp.png/revision/latest?cb=20251129072049"
+	elseif string.match(RandomPet, "Wasp") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/f/f8/The_Wasp.png/revision/latest/scale-to-width-down/268?cb=20250806115517"
+	elseif string.match(RandomPet, "Ruby Squid") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/21/RubySquid.png/revision/latest?cb=20251115032216"
+	elseif string.match(RandomPet, "Turtle Dove") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/22/TurtleDove.png/revision/latest/scale-to-width-down/268?cb=20251213133146"
+	elseif string.find(RandomPet, "^Rainbow Frost Dragon") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/3/3f/RainbowFrostDragon.png/revision/latest?cb=20251215142935"
+	elseif string.match(RandomPet, "Frost Dragon") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/e/e4/FrostDragon.png/revision/latest/scale-to-width-down/268?cb=20251207231434"
+	elseif string.match(RandomPet, "Hummingbird") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/23/Hummingbird.png/revision/latest?cb=20250927082057"
+	elseif string.find(RandomPet, "^GIANT Robin") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/f/f9/GIANTRobin.png/revision/latest?cb=20250920080908"
+	elseif string.match(RandomPet, "Robin") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/1/1b/Robin.png/revision/latest?cb=20250913055923"
+	elseif string.find(RandomPet, "^GIANT Mantis Shrimp") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/9/91/GIANT_Mantis_Shrimp.png/revision/latest?cb=20251106094157"
+	elseif string.match(RandomPet, "Mantis Shrimp") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/0/0c/Mantis_Shrimp.png/revision/latest?cb=20251106094040"
+	elseif string.match(RandomPet, "Apple Gazelle") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/b/bc/AppleGazelle.png/revision/latest?cb=20250823054639"
+	elseif string.match(RandomPet, "Lemon Lion") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/2e/Lemon_Lion.png/revision/latest?cb=20250823054730"
+	elseif string.match(RandomPet, "Pine Beetle") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/d/d1/PineBeetle.png/revision/latest/scale-to-width-down/268?cb=20251213133145"
+	elseif string.match(RandomPet, "Disco Bee") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/f/f2/DiscoBeeIcon.gif/revision/latest/scale-to-width-down/268?cb=20250806112507"
+	elseif string.find(RandomPet, "^Rainbow Brown Owl") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/4/44/RainbowBrownOwl.png/revision/latest/scale-to-width-down/268?cb=20260117041417"
+	elseif string.match(RandomPet, "Brown Owl") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/20/BrownOwl.png/revision/latest/scale-to-width-down/268?cb=20260117041403"
+	elseif string.match(RandomPet, "Raccoon") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/5/54/Raccon_Better_Quality.png/revision/latest/scale-to-width-down/268?cb=20260121085435"
+	elseif string.match(RandomPet, "Mimic Octopus") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/1/15/MimicOctopusImage.png/revision/latest/scale-to-width-down/268?cb=20250806125636"
+	elseif string.match(RandomPet, "Ostrich") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/8/89/OstrichImage.png/revision/latest/scale-to-width-down/156?cb=20250806125148"
+	elseif string.match(RandomPet, "Scarlet Macaw") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/1/12/ScarletMacaw.png/revision/latest/scale-to-width-down/156?cb=20250806125546"
+	elseif string.match(RandomPet, "Capybara") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/f/f2/CapybaraImage.png/revision/latest/scale-to-width-down/156?cb=20250806125401"
+	elseif string.match(RandomPet, "Starfish") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/6/62/StarfishIcon.webp/revision/latest?cb=20250621133143"
+	elseif string.match(RandomPet, "Seagull") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/5/59/SeagullIcon.webp/revision/latest?cb=20250621133144"
+	elseif string.match(RandomPet, "Crab") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/b/b9/CrabIcon.webp/revision/latest?cb=20250621133143"
+	elseif string.match(RandomPet, "Flamingo") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/e/ec/FlamingoIcon.webp/revision/latest?cb=20250621135449"
+	elseif string.match(RandomPet, "Toucan") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/1/10/ToucanIcon.webp/revision/latest?cb=20250621135448"
+	elseif string.match(RandomPet, "Sea Turtle") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/a/ad/SeaTurtleIcon.webp/revision/latest?cb=20250621135447"
+	elseif string.match(RandomPet, "Orangutan") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/4/47/OrangutanIcon.webp/revision/latest?cb=20250621135443"
+	elseif string.match(RandomPet, "Meerkat") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/c/c2/Meerkat.png/revision/latest/scale-to-width-down/156?cb=20250806111101"
+	elseif string.match(RandomPet, "Sand Snake") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/3/3f/SandSnakeHd.png/revision/latest/scale-to-width-down/156?cb=20250806122030"
+	elseif string.match(RandomPet, "Hyacinth Macaw") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/f/ff/HyacinthMacawHd.png/revision/latest/scale-to-width-down/156?cb=20250806122304"
+	elseif string.match(RandomPet, "Axolotl") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/9/91/Axolotl.png/revision/latest/scale-to-width-down/156?cb=20250806111640"
+	elseif string.match(RandomPet, "Fennec Fox") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/b/b3/FennecFoxHd.png/revision/latest/scale-to-width-down/156?cb=20250806122330"
+	elseif string.match(RandomPet, "Tarantula Hawk") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/7/78/The_Tarantula_Hawk.png/revision/latest/scale-to-width-down/156?cb=20250806115523"
+	elseif string.match(RandomPet, "Moth") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/0/09/Moth.png/revision/latest/scale-to-width-down/156?cb=20250806110921"
+	elseif string.match(RandomPet, "Butterfly") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/1/18/Thy_Butterfly_V2.png/revision/latest/scale-to-width-down/156?cb=20250806112723"
+	elseif string.find(RandomPet, "^Bee") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/f/f2/Beee.png/revision/latest/scale-to-width-down/156?cb=20250806112914"
+	elseif string.find(RandomPet, "^Honey Bee") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/1/14/HoneyBee.png/revision/latest/scale-to-width-down/156?cb=20250806113022"
+	elseif string.find(RandomPet, "^Bear Bee") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/8/8b/Bearbeee1.png/revision/latest/scale-to-width-down/156?cb=20250806113242"
+	elseif string.find(RandomPet, "^Petal Bee") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/5/52/Petalbee.png/revision/latest/scale-to-width-down/156?cb=20250816083710"
+	elseif string.find(RandomPet, "^Queen Bee") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/7/7a/Queen_bee.png/revision/latest/scale-to-width-down/156?cb=20250806113123"
+	elseif string.match(RandomPet, "Caterpillar") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/3/3d/Caterpillar_Icon.png/revision/latest/scale-to-width-down/156?cb=20250806130242"
+	elseif string.match(RandomPet, "Snail") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/e/e2/Snail_Pet.png/revision/latest/scale-to-width-down/156?cb=20250806130321"
+	elseif string.find(RandomPet, "^Giant Ant") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/0/0b/GiantAntIcon.png/revision/latest/scale-to-width-down/156?cb=20250806130418"
+	elseif string.find(RandomPet, "^Dragonfly") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/c/c9/DragonflyIcon.png/revision/latest/scale-to-width-down/156?cb=20260121091037"
+	elseif string.match(RandomPet, "Praying Mantis") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/25/PrayingMantis.png/revision/latest/scale-to-width-down/156?cb=20250724182214"
+	elseif string.find(RandomPet, "^Tree Frog") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/6/63/TreeFrog.png/revision/latest/scale-to-width-down/157?cb=20250927082042"
+	elseif string.match(RandomPet, "Iguana") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/a/af/Iguana.png/revision/latest/scale-to-width-down/156?cb=20250927082210"
+	elseif string.find(RandomPet, "^Chimpanzee") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/0/0c/Chimpanzee.png/revision/latest/scale-to-width-down/156?cb=20250927082230"
+	elseif string.find(RandomPet, "^Tiger") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/e/e0/TigerIcon.png/revision/latest/scale-to-width-down/156?cb=20250927082000"
+	elseif string.find(RandomPet, "^Grey Mouse") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/8/88/GreyMouse.png/revision/latest/scale-to-width-down/156?cb=20250809112625"
+	elseif string.find(RandomPet, "^Brown Mouse") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/8/86/BrownMouse.png/revision/latest/scale-to-width-down/156?cb=20250809112619"
+	elseif string.find(RandomPet, "^Squirrel") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/9/93/Squirrel_Icon.png/revision/latest/scale-to-width-down/156?cb=20250809112643"
+	elseif string.find(RandomPet, "^Red Giant Ant") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/c/c8/RedGiantAntImage.png/revision/latest/scale-to-width-down/156?cb=20250809112712"
+	elseif string.find(RandomPet, "^Red Fox") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/d/d5/RedFox.png/revision/latest/scale-to-width-down/156?cb=20250807132946"
+	elseif string.find(RandomPet, "^Cow") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/8/84/Cow.png/revision/latest/scale-to-width-down/156?cb=20260121090607"
+	elseif string.find(RandomPet, "^Silver Monkey") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/a/a7/Silvermonkey.png/revision/latest/scale-to-width-down/156?cb=20260121090855"
+	elseif string.match(RandomPet, "Sea Otter") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/c/c3/Sea_Otter.png/revision/latest/scale-to-width-down/156?cb=20260121090757"
+	elseif string.match(RandomPet, "Turtle") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/b/b1/Turtle_icon.png/revision/latest/scale-to-width-down/156?cb=20250806111530"
+	elseif string.find(RandomPet, "^Polar Bear") then
+		PetImage4 = "https://static.wikia.nocookie.net/growagarden/images/2/25/Polarbear.png/revision/latest/scale-to-width-down/156?cb=20260121090710"
+	else
+		PetImage4 = "https://cdn.discordapp.com/emojis/1464025433774227468.webp?size=44"
+	end
+
+	local r = math.random(0, 255)
+	local g = math.random(0, 255)
+	local b = math.random(0, 255)
+
+	local Color = r * 65536 + g * 256 + b
+
+	local response = request(
+		{
+			Url = Webhook,
+			Method = "POST",
+			Headers = {
+				['Content-Type'] = "application/json"
+			},
+			Body = HttpService:JSONEncode({
+				["content"] = "",
+				["embeds"] = {{
+					["title"] = "Successful Snipe!",
+					["description"] = Display.." Has Sniped a "..PetName,
+					["type"] = "rich",
+					["color"] = Color,
+					["thumbnail"] = {["url"] = TokenThumbnail},
+					["image"] = {["url"] = PetImage},
+					["fields"] = {
+
+						{["name"] = "Tokens Spent ", ["value"] = tostring(Price3), ["inline"] = true}
+					}
+				}}
+			})
+
+
+		}
+	)
+	
+	if not SnipeWebhookInfo then
+		Price3 = nil
+		return
+	end
+	
+	local response2 = request(
+		{
+			Url = SnipeWebhookInfo,
+			Method = "POST",
+			Headers = {
+				['Content-Type'] = "application/json"
+			},
+			Body = HttpService:JSONEncode({
+				["content"] = "",
+				["embeds"] = {{
+					["title"] = "Successful Snipe!",
+					["description"] = Display.." Has Sniped a "..PetName,
+					["type"] = "rich",
+					["color"] = Color,
+					["thumbnail"] = {["url"] = TokenThumbnail},
+					["image"] = {["url"] = PetImage},
+					["fields"] = {
+
+						{["name"] = "Tokens Spent ", ["value"] = tostring(Price3), ["inline"] = true}
+					}
+				}}
+			})
+
+
+		}
+	)
+	Price3 = nil
+end)
+
+
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
+local Screentype
+local UIS = game:GetService("UserInputService")
+
+if UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled then
+	Screentype = UDim2.new(0.5, 0, 0.6, 0)
+end
+
+local Window = Fluent:CreateWindow({
+	Title = "Gag Plaza Sniper v1.3",
+	SubTitle = "by BigHead",
+	TabWidth = 120,
+	Size = Screentype or UDim2.new(0.3, 0, 0.4, 0),
+	Acrylic = false,
+	Theme = "Aqua",
+})
+
+
+
+local Tabs = {
+	Main = Window:AddTab({ Title = "Main", Icon = "armchair" }),
+	Misc = Window:AddTab({ Title = "Misc", Icon = "hand" }),
+	ServerHopping = Window:AddTab({ Title = "Server Hopping", Icon = "refresh-ccw" }),
+	Booth = Window:AddTab({ Title = "Booth", Icon = "shopping-cart" }),
+	Webhooks = Window:AddTab({ Title = "Webhooks", Icon = "eye" }),
+	PetList = Window:AddTab({ Title = "Pet List", Icon = "bone" }),
+	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon = "egg" }),
+	PetFinder = Window:AddTab({ Title = "Pet Finder", Icon = "search" }),
+	Settings = Window:AddTab({ Title = "Settings", Icon = "cog" })
+}
+
+local Options = Fluent.Options
+
+do
+	Fluent:Notify({
+		Title = "Please Comment Any Suggestions in the discord",
+		Content = "Do it if you want updates.",
+		SubContent = "",
+		Duration = 10
+	})
+
+	local Section = Tabs.ServerHopping:AddSection("Server Hop Settings")
+
+	Tabs.ServerHopping:AddParagraph({
+		Title = "Time in Seconds Before ServerHopping",
+		Content = ""
+	})
+
+	local ServerHopToggle = Tabs.ServerHopping:AddToggle("ServerHopToggle", {Title = "Server Hop Toggle", Default = false })
+
+	Tabs.ServerHopping:AddParagraph({
+		Title = "To Re-enable the ServerHop/Change The Time",
+		Content = "toggle Sniper Toggle off and on again, after you have made the changes"
+	})
+
+	ServerHopToggle:OnChanged(function(value)
+		ServerHopOn = value
+	end)
+
+	local ServerHopInput = Tabs.ServerHopping:AddInput("ServerHopInput", {
+		Title = "ServerHop Input",
+		Default = 60,
+		Placeholder = "ServerHop Input",
+		Numeric = true, 
+		Finished = false,
+		Callback = function(Value)
+		end
+	})
+
+	ServerHopInput:OnChanged(function()
+		ServerhopInterval = tonumber(ServerHopInput.Value) or 60
+		print("Input updated:", ServerHopInput.Value)
+	end)
+
+	local Section = Tabs.ServerHopping:AddSection("Other")
+
+	local ReExecuteToggle = Tabs.ServerHopping:AddToggle("ReExecuteToggle", {Title = "Auto-Re-Execute", Default = false })
+
+	ReExecuteToggle:OnChanged(function()
+		ReExecute = ReExecuteToggle.Value
+	end)
+
+	local AntiAfkToggle = Tabs.ServerHopping:AddToggle("AntiAFKToggle", {Title = "Anti AFK Toggle", Default = true })
+
+	AntiAfkToggle:OnChanged(function()
+		local Player = game.Players.LocalPlayer
+		if AntiAfkToggle.Value == true then
+			local VirtualUser = game:GetService("VirtualUser")
+			if getconnections then
+				for _, connection in pairs(getconnections(Player.Idled)) do
+					if connection["Disable"] then
+						connection["Disable"](connection)
+					elseif connection["Disconnect"] then
+						connection["Disconnect"](connection)
+					end
+				end
+			else
+				Player.Idled:Connect(function()
+					VirtualUser:CaptureController()
+					VirtualUser:ClickButton2(Vector2.new())
+				end)
+			end
+			print("AFK")
+		end
+
+	end)
+	local AutoReconnectConnection
+
+
+	local AutoReconnectToggle = Tabs.ServerHopping:AddToggle("AutoReconnectToggle", {Title = "Auto Reconnect Toggle", Default = true })
+
+	AutoReconnectToggle:OnChanged(function()
+		local Player = game.Players.LocalPlayer
+		local JobId = game.JobId
+
+		if AutoReconnectConnection then
+			AutoReconnectConnection:Disconnect()
+			AutoReconnectConnection = nil
+			return
+		end
+
+
+		if AutoReconnectToggle.Value == true then
+			AutoReconnectConnection = GuiService.ErrorMessageChanged:Connect(function()
+				if #Players:GetPlayers() <= 1 then
+					Player:Kick("\nRejoining...")
+					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
+					wait()
+					TeleportService:Teleport(PlaceId, Player)
+				else
+					TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Player)
+					print("TP")
+				end
+
+			end)
+		end
+	end)
+
+
+
+	local Section = Tabs.Main:AddSection("Sniper and Other")
+
+	Tabs.Main:AddParagraph({
+		Title = "To Use The Sniper",
+		Content = "Toggle it on and enter the maximum price in pet list, along with the pet you want to snipe."
+	})
+
+
+	local SniperToggle = Tabs.Main:AddToggle("SniperToggle", {Title = "Sniper Toggle", Default = false })
+
+	SniperToggle:OnChanged(function(value)
+		SniperActive = value
+		if SniperActive then
+			task.spawn(function()
+				while SniperActive do
+					FindAllPets()
+					task.wait(5) 
+				end
+			end)
+
+			task.spawn(function()
+				while SniperActive do
+					task.wait(1)
+					if ServerHopOn == false then continue end
+					task.wait(ServerhopInterval or 10)
+					if ServerHopOn == false then continue end
+					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
+					pcall(ServerHop)
+				end
+			end)
+		end
+		print("Toggle changed:", Options.SniperToggle.Value)
+	end)
+
+	local Section = Tabs.PetList:AddSection("Pet Slot 1")
+
+	Tabs.PetList:AddParagraph({
+		Title = "Caps DO NOT MATTER",
+		Content = "Just make sure you spell it right."
+	})
+
+
+	local PetInput = Tabs.PetList:AddInput("PetInput", {
+		Title = "Pet Name Input",
+		Default = "None",
+		Placeholder = "Pet Name",
+		Numeric = false,
+		Finished = false,
+		Callback = function(Value)
+			print("Input changed:", Value)
+		end
+	})
+
+	PetInput:OnChanged(function()
+		SelectedPet = PetInput.Value or "None"
+	end)
+
+
+	local TokenInput1 = Tabs.PetList:AddInput("MaxTokenInput", {
+		Title = "Max Token Input",
+		Default = 10,
+		Placeholder = "Max Tokens",
+		Numeric = true, 
+		Finished = false, 
+		Callback = function(Value)
+			print("Input changed:", Value)
+		end
+	})
+
+	TokenInput1:OnChanged(function()
+		TokenValue = tonumber(TokenInput1.Value) or 10
+		print("Input updated:", TokenInput1.Value)
+	end)
+end
+
+local Section = Tabs.PetList:AddSection("Pet Slot 2")
+
+local PetInput2 = Tabs.PetList:AddInput("PetInput2", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput2:OnChanged(function()
+	SelectedPet2 = PetInput2.Value or "None"
+end)
+
+local TokenInput2 = Tabs.PetList:AddInput("MaxTokenInput2", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput2:OnChanged(function()
+	TokenValue2 = tonumber(TokenInput2.Value) or 10
+	print("Input updated:", TokenInput2.Value)
+end)
+
+local Section = Tabs.PetList:AddSection("Pet Slot 3")
+
+local PetInput3 = Tabs.PetList:AddInput("PetInput3", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput3:OnChanged(function()
+	SelectedPet3 = PetInput3.Value or "None"
+end)
+
+local TokenInput3 = Tabs.PetList:AddInput("MaxTokenInput3", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput3:OnChanged(function()
+	TokenValue3 = tonumber(TokenInput3.Value) or 10
+	print("Input updated:", TokenInput3.Value)
+end)
+
+local Section = Tabs.PetList:AddSection("Pet Slot 4")
+
+
+local PetInput4 = Tabs.PetList:AddInput("PetInput4", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput4:OnChanged(function()
+	SelectedPet4 = PetInput4.Value or "None"
+end)
+
+local TokenInput4 = Tabs.PetList:AddInput("MaxTokenInput4", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput4:OnChanged(function()
+	TokenValue4 = tonumber(TokenInput4.Value) or 10
+	print("Input updated:", TokenInput4.Value)
+end)
+
+local Section = Tabs.PetList:AddSection("Pet Slot 5")
+
+local PetInput5 = Tabs.PetList:AddInput("PetInput5", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput5:OnChanged(function()
+	SelectedPet5 = PetInput5.Value or "None"
+end)
+
+local TokenInput5 = Tabs.PetList:AddInput("MaxTokenInput5", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput5:OnChanged(function()
+	TokenValue5 = tonumber(TokenInput5.Value) or 10
+	print("Input updated:", TokenInput5.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 6")
+
+local PetInput6 = Tabs.PetList2:AddInput("PetInput6", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput6:OnChanged(function()
+	SelectedPet6 = PetInput6.Value or "None"
+end)
+
+local TokenInput6 = Tabs.PetList2:AddInput("MaxTokenInput6", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput6:OnChanged(function()
+	TokenValue6 = tonumber(TokenInput6.Value) or 10
+	print("Input updated:", TokenInput6.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 7")
+
+local PetInput7 = Tabs.PetList2:AddInput("PetInput7", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput7:OnChanged(function()
+	SelectedPet7 = PetInput7.Value or "None"
+end)
+
+local TokenInput7 = Tabs.PetList2:AddInput("MaxTokenInput7", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput7:OnChanged(function()
+	TokenValue7 = tonumber(TokenInput7.Value) or 10
+	print("Input updated:", TokenInput7.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 8")
+
+local PetInput8 = Tabs.PetList2:AddInput("PetInput8", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput8:OnChanged(function()
+	SelectedPet8 = PetInput8.Value or "None"
+end)
+
+local TokenInput8 = Tabs.PetList2:AddInput("MaxTokenInput8", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput8:OnChanged(function()
+	TokenValue8 = tonumber(TokenInput8.Value) or 10
+	print("Input updated:", TokenInput8.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 9")
+
+local PetInput9 = Tabs.PetList2:AddInput("PetInput9", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false, 
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput9:OnChanged(function()
+	SelectedPet9 = PetInput9.Value or "None"
+end)
+
+local TokenInput9 = Tabs.PetList2:AddInput("MaxTokenInput9", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput9:OnChanged(function()
+	TokenValue9 = tonumber(TokenInput9.Value) or 10
+	print("Input updated:", TokenInput9.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 10")
+
+local PetInput10 = Tabs.PetList2:AddInput("PetInput10", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput10:OnChanged(function()
+	SelectedPet10 = PetInput10.Value or "None"
+end)
+
+local TokenInput10 = Tabs.PetList2:AddInput("MaxTokenInput10", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput10:OnChanged(function()
+	TokenValue10 = tonumber(TokenInput10.Value) or 10
+	print("Input updated:", TokenInput10.Value)
+end)
+
+
+
+
+local Section = Tabs.Webhooks:AddSection("Snipe Webhook")
+
+Tabs.Webhooks:AddParagraph({
+	Title = "Not how to use:",
+	Content = "Sup webhooks are here, have fun ill be updating them soon"
+})
+
+
+local SnipeWebhookToggle = Tabs.Webhooks:AddToggle("SnipeWebhookToggle", {Title = "Snipe Webhook Toggle", Default = false })
+
+SnipeWebhookToggle:OnChanged(function()
+	SnipeWebhook = SnipeWebhookToggle.Value
+end)
+
+local SnipeWebhookInput = Tabs.Webhooks:AddInput("SnipeWebhookInput", {
+	Title = "Snipe Webhook",
+	Default = "",
+	Placeholder = "https://discord.com/api/webhooks/{WEBHOOK_ID}/{WEBHOOK_TOKEN}",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+	SnipeWebhookInput:OnChanged(function()
+		SnipeWebhookInfo = SnipeWebhookInput.Value or nil
+	end)
+
+
+local Section = Tabs.Booth:AddSection("Booth Bot Settings")
+
+Tabs.Booth:AddParagraph({
+	Title = "How To Use",
+	Content = "Think of this like a Salesman agent that stands out, it will try and lure people to your booth with cool tricks, that will rapidly increase the amount of people that see your booth"
+})
+
+
+local CheckPlayerConn
+local BoothBotRunning = false
+
+local BoothBotToggle = Tabs.Booth:AddToggle("BoothBotToggle", {Title = "Booth Bot Toggle", Default = false })
+
+BoothBotToggle:OnChanged(function()
+	BoothBotRunning = BoothBotToggle.Value
+		if BoothBotRunning then
+			
+			CheckPlayerConn = game:GetService("RunService").Heartbeat:Connect(function()
+				GetClosestPlayers()
+			end)
+			
+			task.spawn(function()
+				while BoothBotRunning do
+					task.wait(5)
+					WalkToBooth()
+					task.wait(120)
+				end
+			end)
+			
+			task.spawn(function()
+				while BoothBotRunning do
+					Dance()
+					task.wait(10)
+				end
+			end)
+			
+			task.spawn(function()
+				while BoothBotRunning do
+					task.wait(0.05)
+					WaveAndHi()
+				end
+			end)
+		else
+			if CheckPlayerConn then
+				CheckPlayerConn:Disconnect()
+			end
+		end
+end)
+
+local FlexInterval = 20
+local FlexRunning = false
+
+local FlexPetsToggle = Tabs.Booth:AddToggle("FlexPetsToggle", {Title = "Flex Pets Toggle", Default = false })
+
+FlexPetsToggle:OnChanged(function()
+	FlexRunning = FlexPetsToggle.Value
+		if FlexRunning then
+			task.spawn(function()
+				while FlexRunning do
+					FlexOnNoobs()
+					task.wait(FlexInterval)
+				end
+			end)
+		end
+end)
+
+
+
+local FlexPetsSlider = Tabs.Booth:AddSlider("FlexPetsSlider", {
+	Title = "Flex Pets Cooldown",
+	Description = "Cooldown on flexing pets",
+	Default = 20,
+	Min = 0.1,
+	Max = 60,
+	Rounding = 1,
+	Callback = function(Value)
+		print("Slider was changed:", Value)
+	end
+})
+
+FlexPetsSlider:OnChanged(function(Value)
+	FlexInterval = tonumber(Value)
+end)
+
+local LureRunning
+local LureInterval = 30
+
+local LureToBoothToggle = Tabs.Booth:AddToggle("LureToBoothToggle", {Title = "Lure To Booth Toggle", Default = false })
+
+LureToBoothToggle:OnChanged(function()
+	LureRunning = LureToBoothToggle.Value
+		if LureRunning then
+			task.spawn(function()
+				while LureRunning do
+					task.wait(LureInterval)
+					PointAndWalk()
+				end
+			end)
+		end
+end)
+
+
+local LureToBoothSlider = Tabs.Booth:AddSlider("LureToBoothSlider", {
+	Title = "Lure To Booth Cooldown",
+	Description = "Cooldown on luring players to booth",
+	Default = 240,
+	Min = 30,
+	Max = 600,
+	Rounding = 1,
+	Callback = function(Value)
+		print("Slider was changed:", Value)
+	end
+})
+
+
+LureToBoothSlider:OnChanged(function(Value)
+	LureInterval = tonumber(Value)
+end)
+
+
+
+local Section = Tabs.PetFinder:AddSection("Misc")
+
+
+Tabs.PetFinder:AddParagraph({
+	Title = "How to use",
+	Content = "This will find a pet globally meeting kg, and pet type, if it finds it, it will automatically teleport to the pet. Even if serverhop is off this will tp to the seller (This shows in console)"
+})
+
+local PetFinderToggle = Tabs.PetFinder:AddToggle("PetFinderToggle", {Title = "Pet Finder Toggle", Default = false })
+
+PetFinderToggle:OnChanged(function()
+	local Running = PetFinderToggle.Value
+	if Running then
+		Found = false
+		task.spawn(function()
+			while Running do
+				task.wait(300)
+				SeenListings = {}
+				print("♻️ Cleared seen listings cache")
+			end
+		end)
+		task.spawn(function()
+			while Running do
+				if not ExoticPet1 then return end
+				task.wait(10)
+				args[2].PetData.BaseWeight = StartingWeight
+				print("🔍 Searching listings...")
+
+				local success, listingId = game:GetService("ReplicatedStorage")
+					:WaitForChild("GameEvents")
+					:WaitForChild("TradeEvents")
+					:WaitForChild("TokenRAPs")
+					:WaitForChild("FindSellers")
+					:InvokeServer(unpack(args))
+
+				if not success or type(listingId) ~= "string" then
+					print("Adjusted Weight:", StartingWeight)
+					if MinimumWeight == MaximumWeight or StartingWeight <= 0 then continue end
+					if StartingWeight == MinimumWeight then
+						WeightStep = 0.1
+					elseif StartingWeight == MaximumWeight then
+						WeightStep = -0.1
+					end
+					StartingWeight = StartingWeight + WeightStep
+					StartingWeight = math.floor(StartingWeight * 10 + 0.5) / 10
+					continue
+				end
+
+				if SeenListings[listingId] then
+					print("⚠️ Already seen ListingId:", listingId)
+					continue
+				end
+				SeenListings[listingId] = true
+
+				Found = true
+				print("✅ MATCH FOUND! ListingId:", listingId)
+				print("Pet:", args[2].PetType, "| Weight:", args[2].PetData.BaseWeight * 10)
+
+				task.wait(5)
+				game:GetService("ReplicatedStorage")
+					:WaitForChild("GameEvents")
+					:WaitForChild("TradeEvents")
+					:WaitForChild("TokenRAPs")
+					:WaitForChild("TeleportToListing")
+					:InvokeServer(listingId)
+			end
+		end)
+	else
+		Found = true
+	end
+
+end)
+
+local ConsoleToggle = Tabs.PetFinder:AddToggle("ConsoleToggle", {Title = "Console Toggle", Default = false })
+
+ConsoleToggle:OnChanged(function()
+end)
+
+
+local Section = Tabs.PetFinder:AddSection("Pet Finder 1")
+
+Tabs.PetFinder:AddParagraph({
+	Title = "CHECK THIS",
+	Content = "USE BASEWEIGHT FOR KG, Example: 5.5 = sniping 55kg max pet, IF YOU LEAVE AT 0 THEN IT WONT USE IT AND THATS FINE, AND THE PET NAME MUST BE RIGHT CAPS AND RIGHT SPELLING, EXAMPLE: cannot be kitsune, must be Kitsune, or Rainbow Dilophosaurus"
+})
+
+local ExoticPetInput1 = Tabs.PetFinder:AddInput("ExoticPetInput1", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+ExoticPetInput1:OnChanged(function()
+	ExoticPet1 = ExoticPetInput1.Value or "None"
+	args[2].PetType = ExoticPet1
+end)
+
+local ExoticTokenInput1 = Tabs.PetFinder:AddInput("ExoticTokenInput1", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+ExoticTokenInput1:OnChanged(function()
+	ExoticToken1 = tonumber(ExoticTokenInput1.Value) or 10
+	print("Input updated:", ExoticTokenInput1.Value)
+end)
+
+local MinimumWeightInput1 = Tabs.PetFinder:AddInput("MinimumWeightInput1", {
+	Title = "Minimum Weight Input",
+	Default = 0,
+	Placeholder = "Minimum Weight",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+MinimumWeightInput1:OnChanged(function()
+	MinimumWeight = tonumber(MinimumWeightInput1.Value) or 0
+	print("Input updated:", MinimumWeightInput1.Value)
+end)
+
+local MaximumWeightInput1 = Tabs.PetFinder:AddInput("MaximumWeightInput1", {
+	Title = "Maximum Weight Input",
+	Default = 0,
+	Placeholder = "Maximum Weight",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+MaximumWeightInput1:OnChanged(function()
+	MaximumWeight = tonumber(MaximumWeightInput1.Value) or 0
+	StartingWeight = MaximumWeight
+	print("Input updated:", MaximumWeightInput1.Value)
+end)
+
+
+local Section = Tabs.Misc:AddSection("Miscellanceous")
+
+local WalkspeedSlider = Tabs.Misc:AddSlider("Walkspeed Slider", {
+	Title = "Walkspeed Slider",
+	Description = "WalkSpeed",
+	Default = 16,
+	Min = 0,
+	Max = 500,
+	Rounding = 1,
+	Callback = function(Value)
+	end
+})
+
+
+WalkspeedSlider:OnChanged(function(Value)
+	Character.Humanoid.WalkSpeed = Value
+end)
+
+
+
+
+
+
+local Gui  = nil
+local Button = nil
+local LastPlace
+
+local Icon = RunService.Heartbeat:Connect(function()
+	if Window.Minimized == true and Gui == nil and Button == nil then
+
+
+		Gui = Instance.new("ScreenGui")
+		Gui.Name = "FloatingToggle"
+		Gui.ResetOnSpawn = false
+		Gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+		local ScreenType
+
+
+		Button = Instance.new("ImageButton")
+		if UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled then 
+			ScreenType = UDim2.fromOffset(35, 35)
+		else
+			ScreenType = UDim2.fromOffset(100, 100)
+		end
+		Button.Size = ScreenType
+		Button.Position = LastPlace or UDim2.fromScale(0.5, 0.5)
+		Button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		Button.BorderSizePixel = 0
+		Button.Parent = Gui
+		Button.BackgroundTransparency = 0
+		Button.ScaleType = Enum.ScaleType.Fit
+		Button.Image = "rbxassetid://12169663385"
+		Button.ImageTransparency = 0
+
+
+		local Corner = Instance.new("UICorner")
+		Corner.CornerRadius = UDim.new(0.2, 0)
+		Corner.Parent = Button
+
+
+		local dragging = false
+		local dragStart, startPos
+
+		Button.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1
+				or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = true
+				dragStart = input.Position
+				startPos = Button.Position
+			end
+		end)
+
+		Button.InputEnded:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1
+				or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = false
+				Window:Minimize()
+			end
+		end)
+
+		UIS.InputChanged:Connect(function(input)
+			if dragging and (
+				input.UserInputType == Enum.UserInputType.MouseMovement
+					or input.UserInputType == Enum.UserInputType.Touch
+				) then
+				local delta = input.Position - dragStart
+				Button.Position = UDim2.new(
+					startPos.X.Scale,
+					startPos.X.Offset + delta.X,
+					startPos.Y.Scale,
+					startPos.Y.Offset + delta.Y
+				)
+				LastPlace = Button.Position
+			end
+		end)
+
+	elseif Window.Minimized == false and Gui and Button then
+		Gui:Destroy()
+		Button:Destroy()
+		Gui = nil
+		Button = nil
+
+	end
+
+end)
+
+
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+InterfaceManager:SetFolder("JourneyScriptHub")
+SaveManager:SetFolder("JourneyScriptHub/GagPlaza")
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+
+Window:SelectTab("Main")
+
+Fluent:Notify({
+	Title = "Yo",
+	Content = "script loaded enjoy.",
+	Duration = 8
+})
+SaveManager:LoadAutoloadConfig()
