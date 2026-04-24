@@ -436,270 +436,66 @@ local function CheckKg(PetUUID)
 end
 
 local function BuyPet()
-	if SelectedPet == "None" and SelectedPet2 == "None" and SelectedPet3 == "None" and SelectedPet4 == "None" and SelectedPet5 == "None" and SelectedPet6 == "None" and SelectedPet7 == "None" and SelectedPet8 == "None" and SelectedPet9 == "None" and SelectedPet10 == "None" and SelectedPet11 == "None" and SelectedPet12 == "None" and SelectedPet13 == "None" and SelectedPet14 == "None" and SelectedPet15 == "None" and SelectedPet16 == "None" and SelectedPet17 == "None" and SelectedPet18 == "None" and SelectedPet19 == "None" and SelectedPet20 == "None" then return end
 	if not PetPrice or not PetName or not PetListingID or not PlayerName then return end
-
-	if SelectedPet:lower() == PetName:lower() and TokenValue and PetPrice <= TokenValue then
+	
+	-- Create lookup table for selected pets and token values
+	local petChecks = {
+		{SelectedPet, TokenValue},
+		{SelectedPet2, TokenValue2},
+		{SelectedPet3, TokenValue3},
+		{SelectedPet4, TokenValue4},
+		{SelectedPet5, TokenValue5},
+		{SelectedPet6, TokenValue6},
+		{SelectedPet7, TokenValue7},
+		{SelectedPet8, TokenValue8},
+		{SelectedPet9, TokenValue9},
+		{SelectedPet10, TokenValue10},
+		{SelectedPet11, TokenValue11},
+		{SelectedPet12, TokenValue12},
+		{SelectedPet13, TokenValue13},
+		{SelectedPet14, TokenValue14},
+		{SelectedPet15, TokenValue15},
+		{SelectedPet16, TokenValue16},
+		{SelectedPet17, TokenValue17},
+		{SelectedPet18, TokenValue18},
+		{SelectedPet19, TokenValue19},
+		{SelectedPet20, TokenValue20},
+	}
+	
+	local petNameLower = PetName:lower()
+	
+	-- Check all pets in one loop
+	for _, petData in ipairs(petChecks) do
+		local selectedPet, tokenValue = petData[1], petData[2]
+		if selectedPet ~= "None" and selectedPet:lower() == petNameLower and tokenValue and PetPrice <= tokenValue then
+			local ownerPlayer = Players:FindFirstChild(PlayerName)
+			if ownerPlayer then
+				local success = pcall(function()
+					ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
+				end)
+				if success then return end -- Exit after first successful purchase
+			end
+		end
+	end
+	
+	-- Check rare pet
+	if RainbowRarePet ~= "None" and RainbowRarePet:lower() == petNameLower and RainbowRareTokenValue and PetPrice <= RainbowRareTokenValue then
 		local ownerPlayer = Players:FindFirstChild(PlayerName)
 		if ownerPlayer then
-			local success, err = pcall(function()
+			pcall(function()
 				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
 			end)
-			if not success then
-				warn("Failed to buy pet:", err)
-			end
+			return
 		end
 	end
-
-	if SelectedPet2:lower() == PetName:lower() and TokenValue2 and PetPrice <= TokenValue2 then
-		local ownerPlayer2 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer2 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer2, PetListingID)
+	
+	-- Check exotic pet (with weight requirement)
+	if ExoticPet1 ~= "None" and ExoticPet1:lower() == petNameLower and ExoticToken1 and PetPrice <= ExoticToken1 and weight >= MinimumWeight * 10 then
+		local ownerPlayer = Players:FindFirstChild(PlayerName)
+		if ownerPlayer then
+			pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
 			end)
-			if not success then
-				warn("Failed to buy pet 2:", err)
-			end
-		end
-	end
-
-	if SelectedPet3:lower() == PetName:lower() and TokenValue3 and PetPrice <= TokenValue3 then
-		local ownerPlayer3 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer3 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer3, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 3:", err)
-			end
-		end
-	end
-
-	if SelectedPet4:lower() == PetName:lower() and TokenValue4 and PetPrice <= TokenValue4 then
-		local ownerPlayer4 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer4 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer4, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 4:", err)
-			end
-		end
-	end
-
-	if SelectedPet5:lower() == PetName:lower() and TokenValue5 and PetPrice <= TokenValue5 then
-		local ownerPlayer5 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer5 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer5, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 5:", err)
-			end
-		end
-	end
-
-	if SelectedPet6:lower() == PetName:lower() and TokenValue6 and PetPrice <= TokenValue6 then
-		local ownerPlayer6 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer6 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer6, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 6:", err)
-			end
-		end
-	end
-
-	if SelectedPet7:lower() == PetName:lower() and TokenValue7 and PetPrice <= TokenValue7 then
-		local ownerPlayer7 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer7 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer7, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 7:", err)
-			end
-		end
-	end
-
-	if SelectedPet8:lower() == PetName:lower() and TokenValue8 and PetPrice <= TokenValue8 then
-		local ownerPlayer8 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer8 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer8, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 8:", err)
-			end
-		end
-	end
-
-	if SelectedPet9:lower() == PetName:lower() and TokenValue9 and PetPrice <= TokenValue9 then
-		local ownerPlayer9 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer9 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer9, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 9:", err)
-			end
-		end
-	end
-
-	if SelectedPet10:lower() == PetName:lower() and TokenValue10 and PetPrice <= TokenValue10 then
-		local ownerPlayer10 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer10 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer10, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 10:", err)
-			end
-		end
-	end
-
-	if SelectedPet11:lower() == PetName:lower() and TokenValue11 and PetPrice <= TokenValue11 then
-		local ownerPlayer11 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer11 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer11, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 11:", err)
-			end
-		end
-	end
-
-	if SelectedPet12:lower() == PetName:lower() and TokenValue12 and PetPrice <= TokenValue12 then
-		local ownerPlayer12 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer12 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer12, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 12:", err)
-			end
-		end
-	end
-
-	if SelectedPet13:lower() == PetName:lower() and TokenValue13 and PetPrice <= TokenValue13 then
-		local ownerPlayer13 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer13 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer13, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 13:", err)
-			end
-		end
-	end
-
-	if SelectedPet14:lower() == PetName:lower() and TokenValue14 and PetPrice <= TokenValue14 then
-		local ownerPlayer14 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer14 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer14, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 14:", err)
-			end
-		end
-	end
-
-	if SelectedPet15:lower() == PetName:lower() and TokenValue15 and PetPrice <= TokenValue15 then
-		local ownerPlayer15 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer15 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer15, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 15:", err)
-			end
-		end
-	end
-
-	if SelectedPet16:lower() == PetName:lower() and TokenValue16 and PetPrice <= TokenValue16 then
-		local ownerPlayer16 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer16 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer16, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 16:", err)
-			end
-		end
-	end
-
-	if SelectedPet17:lower() == PetName:lower() and TokenValue17 and PetPrice <= TokenValue17 then
-		local ownerPlayer17 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer17 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer17, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 17:", err)
-			end
-		end
-	end
-
-	if SelectedPet18:lower() == PetName:lower() and TokenValue18 and PetPrice <= TokenValue18 then
-		local ownerPlayer18 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer18 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer18, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 18:", err)
-			end
-		end
-	end
-
-	if SelectedPet19:lower() == PetName:lower() and TokenValue19 and PetPrice <= TokenValue19 then
-		local ownerPlayer19 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer19 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer19, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 19:", err)
-			end
-		end
-	end
-
-	if SelectedPet20:lower() == PetName:lower() and TokenValue20 and PetPrice <= TokenValue20 then
-		local ownerPlayer20 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer20 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer20, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 20:", err)
-			end
-		end
-	end
-
-	if RainbowRarePet ~= "None" and RainbowRarePet:lower() == PetName:lower() and RainbowRareTokenValue and PetPrice <= RainbowRareTokenValue then
-		local ownerPlayerRare = Players:FindFirstChild(PlayerName)
-		if ownerPlayerRare then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayerRare, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy rare pet:", err)
-			end
-		end
-	end
-
-	if ExoticPet1:lower() == PetName:lower() and ExoticToken1 and PetPrice <= ExoticToken1 and weight >= MinimumWeight * 10 then
-		local ownerPlayer11 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer11 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer11, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 11:", err)
-			end
 		end
 	end
 
@@ -2135,7 +1931,7 @@ Tabs.RareSnipe:AddParagraph({
 
 local RainbowRarePetDropdown = Tabs.RareSnipe:AddDropdown("RainbowRarePetDropdown", {
 	Title = "Select Rainbow/Rare Pet",
-	Values = { "None", "Rainbow Dilophosaurus", "Rainbow Elephant", "Rainbow Birb", "Giant Scorpion","Blue Whale", "Festive Ice Golem" ,
+	Values = { "None", "Rainbow Dilophosaurus", "Rainbow Elephant", "Rainbow Birb", "Giant Scorpion","Blue Whale", "Festive Ice Golem" },
 	Multi = false,
 	Default = "None"
 })
