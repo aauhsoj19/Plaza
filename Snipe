@@ -349,7 +349,19 @@ local SelectedPet7 = "None"
 local SelectedPet8 = "None"
 local SelectedPet9 = "None"
 local SelectedPet10 = "None"
+local SelectedPet11 = "None"
+local SelectedPet12 = "None"
+local SelectedPet13 = "None"
+local SelectedPet14 = "None"
+local SelectedPet15 = "None"
+local SelectedPet16 = "None"
+local SelectedPet17 = "None"
+local SelectedPet18 = "None"
+local SelectedPet19 = "None"
+local SelectedPet20 = "None"
 local ExoticPet1 = "None"
+local RainbowRarePet = "None"
+local RainbowRareTokenValue = 10
 local TokenValue
 local TokenValue2
 local TokenValue3
@@ -360,6 +372,16 @@ local TokenValue7
 local TokenValue8
 local TokenValue9
 local TokenValue10
+local TokenValue11
+local TokenValue12
+local TokenValue13
+local TokenValue14
+local TokenValue15
+local TokenValue16
+local TokenValue17
+local TokenValue18
+local TokenValue19
+local TokenValue20
 local ExoticToken1
 
 local MinimumWeight = 1
@@ -414,138 +436,66 @@ local function CheckKg(PetUUID)
 end
 
 local function BuyPet()
-	if SelectedPet == "None" and SelectedPet2 == "None" and SelectedPet3 == "None" and SelectedPet4 == "None" and SelectedPet5 == "None" and SelectedPet6 == "None" and SelectedPet7 == "None" and SelectedPet8 == "None" and SelectedPet9 == "None" and SelectedPet10 == "None" then return end
 	if not PetPrice or not PetName or not PetListingID or not PlayerName then return end
-
-	if SelectedPet:lower() == PetName:lower() and TokenValue and PetPrice <= TokenValue then
+	
+	-- Create lookup table for selected pets and token values
+	local petChecks = {
+		{SelectedPet, TokenValue},
+		{SelectedPet2, TokenValue2},
+		{SelectedPet3, TokenValue3},
+		{SelectedPet4, TokenValue4},
+		{SelectedPet5, TokenValue5},
+		{SelectedPet6, TokenValue6},
+		{SelectedPet7, TokenValue7},
+		{SelectedPet8, TokenValue8},
+		{SelectedPet9, TokenValue9},
+		{SelectedPet10, TokenValue10},
+		{SelectedPet11, TokenValue11},
+		{SelectedPet12, TokenValue12},
+		{SelectedPet13, TokenValue13},
+		{SelectedPet14, TokenValue14},
+		{SelectedPet15, TokenValue15},
+		{SelectedPet16, TokenValue16},
+		{SelectedPet17, TokenValue17},
+		{SelectedPet18, TokenValue18},
+		{SelectedPet19, TokenValue19},
+		{SelectedPet20, TokenValue20},
+	}
+	
+	local petNameLower = PetName:lower()
+	
+	-- Check all pets in one loop
+	for _, petData in ipairs(petChecks) do
+		local selectedPet, tokenValue = petData[1], petData[2]
+		if selectedPet ~= "None" and selectedPet:lower() == petNameLower and tokenValue and PetPrice <= tokenValue then
+			local ownerPlayer = Players:FindFirstChild(PlayerName)
+			if ownerPlayer then
+				local success = pcall(function()
+					ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
+				end)
+				if success then return end -- Exit after first successful purchase
+			end
+		end
+	end
+	
+	-- Check rare pet
+	if RainbowRarePet ~= "None" and RainbowRarePet:lower() == petNameLower and RainbowRareTokenValue and PetPrice <= RainbowRareTokenValue then
 		local ownerPlayer = Players:FindFirstChild(PlayerName)
 		if ownerPlayer then
-			local success, err = pcall(function()
+			pcall(function()
 				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
 			end)
-			if not success then
-				warn("Failed to buy pet:", err)
-			end
+			return
 		end
 	end
-
-	if SelectedPet2:lower() == PetName:lower() and TokenValue2 and PetPrice <= TokenValue2 then
-		local ownerPlayer2 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer2 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer2, PetListingID)
+	
+	-- Check exotic pet (with weight requirement)
+	if ExoticPet1 ~= "None" and ExoticPet1:lower() == petNameLower and ExoticToken1 and PetPrice <= ExoticToken1 and weight >= MinimumWeight * 10 then
+		local ownerPlayer = Players:FindFirstChild(PlayerName)
+		if ownerPlayer then
+			pcall(function()
+				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
 			end)
-			if not success then
-				warn("Failed to buy pet 2:", err)
-			end
-		end
-	end
-
-	if SelectedPet3:lower() == PetName:lower() and TokenValue3 and PetPrice <= TokenValue3 then
-		local ownerPlayer3 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer3 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer3, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 3:", err)
-			end
-		end
-	end
-
-	if SelectedPet4:lower() == PetName:lower() and TokenValue4 and PetPrice <= TokenValue4 then
-		local ownerPlayer4 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer4 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer4, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 4:", err)
-			end
-		end
-	end
-
-	if SelectedPet5:lower() == PetName:lower() and TokenValue5 and PetPrice <= TokenValue5 then
-		local ownerPlayer5 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer5 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer5, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 5:", err)
-			end
-		end
-	end
-
-	if SelectedPet6:lower() == PetName:lower() and TokenValue6 and PetPrice <= TokenValue6 then
-		local ownerPlayer6 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer6 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer6, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 6:", err)
-			end
-		end
-	end
-
-	if SelectedPet7:lower() == PetName:lower() and TokenValue7 and PetPrice <= TokenValue7 then
-		local ownerPlayer7 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer7 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer7, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 7:", err)
-			end
-		end
-	end
-
-	if SelectedPet8:lower() == PetName:lower() and TokenValue8 and PetPrice <= TokenValue8 then
-		local ownerPlayer8 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer8 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer8, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 8:", err)
-			end
-		end
-	end
-
-	if SelectedPet9:lower() == PetName:lower() and TokenValue9 and PetPrice <= TokenValue9 then
-		local ownerPlayer9 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer9 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer9, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 9:", err)
-			end
-		end
-	end
-
-	if SelectedPet10:lower() == PetName:lower() and TokenValue10 and PetPrice <= TokenValue10 then
-		local ownerPlayer10 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer10 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer10, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 10:", err)
-			end
-		end
-	end
-
-	if ExoticPet1:lower() == PetName:lower() and ExoticToken1 and PetPrice <= ExoticToken1 and weight >= MinimumWeight * 10 then
-		local ownerPlayer11 = Players:FindFirstChild(PlayerName)
-		if ownerPlayer11 then
-			local success, err = pcall(function()
-				ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer11, PetListingID)
-			end)
-			if not success then
-				warn("Failed to buy pet 11:", err)
-			end
 		end
 	end
 
@@ -558,42 +508,42 @@ local function FindAllPets()
 	for _, boothInfo in pairs(data.Booths) do
 		task.wait(0.05)
 		local ownerId = boothInfo.Owner
-		if ownerId and data.Players[ownerId] then
-			local ownerPlayer = TradeBoothData.getPlayerById(ownerId)
-			if ownerPlayer then
-				local playerListings = data.Players[ownerId].Listings
-				if playerListings then
-					local playerItems = data.Players[ownerId].Items
-					if playerItems then
-						for listingID, listingData in pairs(playerListings) do
-							task.wait(0.01)
-							if listingData.ItemType == "Pet" then
-								local petData = playerItems[listingData.ItemId]
-								if petData then
-									local petName = petData.PetType or petData.Name or "Unknown Pet"
+		if not ownerId or not data.Players[ownerId] then continue end
 
-									PetUUID = listingData.ItemId
-									PlayerName = ownerPlayer.Name
-									PetPrice = listingData.Price
-									PetName = petName
-									PetListingID = listingID
+		local ownerPlayer = TradeBoothData.getPlayerById(ownerId)
+		if not ownerPlayer then continue end
 
-									CheckKg()
-									BuyPet()
+		local playerListings = data.Players[ownerId].Listings
+		if not playerListings then continue end
 
-									print(string.format(
-										"Owner: %s | Pet: %s | Pet UUID: %s | Listing ID: %s | Price: %s",
-										ownerPlayer.Name,
-										petName,
-										listingData.ItemId,
-										listingID,
-										listingData.Price
-										))
-								end
-							end
-						end
-					end
-				end
+		local playerItems = data.Players[ownerId].Items
+		if not playerItems then continue end
+
+		for listingID, listingData in pairs(playerListings) do
+			task.wait(0.01)
+			if listingData.ItemType == "Pet" then
+				local petData = playerItems[listingData.ItemId]
+				if not petData then continue end
+
+				local petName = petData.PetType or petData.Name or "Unknown Pet"
+
+				PetUUID = listingData.ItemId
+				PlayerName = ownerPlayer.Name
+				PetPrice = listingData.Price
+				PetName = petName
+				PetListingID = listingID
+
+				CheckKg()
+				BuyPet()
+
+				print(string.format(
+					"Owner: %s | Pet: %s | Pet UUID: %s | Listing ID: %s | Price: %s",
+					ownerPlayer.Name,
+					petName,
+					listingData.ItemId,
+					listingID,
+					listingData.Price
+					))
 			end
 		end
 	end
@@ -1125,8 +1075,8 @@ if UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled then
 end
 
 local Window = Fluent:CreateWindow({
-	Title = "Gag Plaza Sniper v1.3",
-	SubTitle = "by BigHead",
+	Title = "Gag Plaza Sniper v1.5",
+	SubTitle = "by BigHead and Zharkelion",
 	TabWidth = 120,
 	Size = Screentype or UDim2.new(0.3, 0, 0.4, 0),
 	Acrylic = false,
@@ -1143,6 +1093,9 @@ local Tabs = {
 	Webhooks = Window:AddTab({ Title = "Webhooks", Icon = "eye" }),
 	PetList = Window:AddTab({ Title = "Pet List", Icon = "bone" }),
 	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon = "egg" }),
+	PetList3 = Window:AddTab({ Title = "Pet List 3", Icon = "fish" }),
+	PetList4 = Window:AddTab({ Title = "Pet List 4", Icon = "bird" }),
+	RareSnipe = Window:AddTab({ Title = "Rare Snipe", Icon = "gem" }),
 	PetFinder = Window:AddTab({ Title = "Pet Finder", Icon = "search" }),
 	Settings = Window:AddTab({ Title = "Settings", Icon = "cog" })
 }
@@ -1279,13 +1232,11 @@ do
 			task.spawn(function()
 				while SniperActive do
 					task.wait(1)
-					if ServerHopOn == true then
-						task.wait(ServerhopInterval or 10)
-						if ServerHopOn == true then
-							if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
-							pcall(ServerHop)
-						end
-					end
+					if ServerHopOn == false then continue end
+					task.wait(ServerhopInterval or 10)
+					if ServerHopOn == false then continue end
+					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
+					pcall(ServerHop)
 				end
 			end)
 		end
@@ -1631,6 +1582,381 @@ TokenInput10:OnChanged(function()
 	print("Input updated:", TokenInput10.Value)
 end)
 
+local Section = Tabs.PetList3:AddSection("Pet Slot 11")
+
+Tabs.PetList3:AddParagraph({
+	Title = "Caps DO NOT MATTER",
+	Content = "Just make sure you spell it right."
+})
+
+local PetInput11 = Tabs.PetList3:AddInput("PetInput11", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput11:OnChanged(function()
+	SelectedPet11 = PetInput11.Value or "None"
+end)
+
+local TokenInput11 = Tabs.PetList3:AddInput("MaxTokenInput11", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput11:OnChanged(function()
+	TokenValue11 = tonumber(TokenInput11.Value) or 10
+	print("Input updated:", TokenInput11.Value)
+end)
+
+local Section = Tabs.PetList3:AddSection("Pet Slot 12")
+
+local PetInput12 = Tabs.PetList3:AddInput("PetInput12", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput12:OnChanged(function()
+	SelectedPet12 = PetInput12.Value or "None"
+end)
+
+local TokenInput12 = Tabs.PetList3:AddInput("MaxTokenInput12", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput12:OnChanged(function()
+	TokenValue12 = tonumber(TokenInput12.Value) or 10
+	print("Input updated:", TokenInput12.Value)
+end)
+
+local Section = Tabs.PetList3:AddSection("Pet Slot 13")
+
+local PetInput13 = Tabs.PetList3:AddInput("PetInput13", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput13:OnChanged(function()
+	SelectedPet13 = PetInput13.Value or "None"
+end)
+
+local TokenInput13 = Tabs.PetList3:AddInput("MaxTokenInput13", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput13:OnChanged(function()
+	TokenValue13 = tonumber(TokenInput13.Value) or 10
+	print("Input updated:", TokenInput13.Value)
+end)
+
+local Section = Tabs.PetList3:AddSection("Pet Slot 14")
+
+local PetInput14 = Tabs.PetList3:AddInput("PetInput14", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput14:OnChanged(function()
+	SelectedPet14 = PetInput14.Value or "None"
+end)
+
+local TokenInput14 = Tabs.PetList3:AddInput("MaxTokenInput14", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput14:OnChanged(function()
+	TokenValue14 = tonumber(TokenInput14.Value) or 10
+	print("Input updated:", TokenInput14.Value)
+end)
+
+local Section = Tabs.PetList3:AddSection("Pet Slot 15")
+
+local PetInput15 = Tabs.PetList3:AddInput("PetInput15", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput15:OnChanged(function()
+	SelectedPet15 = PetInput15.Value or "None"
+end)
+
+local TokenInput15 = Tabs.PetList3:AddInput("MaxTokenInput15", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput15:OnChanged(function()
+	TokenValue15 = tonumber(TokenInput15.Value) or 10
+	print("Input updated:", TokenInput15.Value)
+end)
+
+local Section = Tabs.PetList4:AddSection("Pet Slot 16")
+
+Tabs.PetList4:AddParagraph({
+	Title = "Caps DO NOT MATTER",
+	Content = "Just make sure you spell it right."
+})
+
+local PetInput16 = Tabs.PetList4:AddInput("PetInput16", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput16:OnChanged(function()
+	SelectedPet16 = PetInput16.Value or "None"
+end)
+
+local TokenInput16 = Tabs.PetList4:AddInput("MaxTokenInput16", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput16:OnChanged(function()
+	TokenValue16 = tonumber(TokenInput16.Value) or 10
+	print("Input updated:", TokenInput16.Value)
+end)
+
+local Section = Tabs.PetList4:AddSection("Pet Slot 17")
+
+local PetInput17 = Tabs.PetList4:AddInput("PetInput17", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput17:OnChanged(function()
+	SelectedPet17 = PetInput17.Value or "None"
+end)
+
+local TokenInput17 = Tabs.PetList4:AddInput("MaxTokenInput17", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput17:OnChanged(function()
+	TokenValue17 = tonumber(TokenInput17.Value) or 10
+	print("Input updated:", TokenInput17.Value)
+end)
+
+local Section = Tabs.PetList4:AddSection("Pet Slot 18")
+
+local PetInput18 = Tabs.PetList4:AddInput("PetInput18", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput18:OnChanged(function()
+	SelectedPet18 = PetInput18.Value or "None"
+end)
+
+local TokenInput18 = Tabs.PetList4:AddInput("MaxTokenInput18", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput18:OnChanged(function()
+	TokenValue18 = tonumber(TokenInput18.Value) or 10
+	print("Input updated:", TokenInput18.Value)
+end)
+
+local Section = Tabs.PetList4:AddSection("Pet Slot 19")
+
+local PetInput19 = Tabs.PetList4:AddInput("PetInput19", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput19:OnChanged(function()
+	SelectedPet19 = PetInput19.Value or "None"
+end)
+
+local TokenInput19 = Tabs.PetList4:AddInput("MaxTokenInput19", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput19:OnChanged(function()
+	TokenValue19 = tonumber(TokenInput19.Value) or 10
+	print("Input updated:", TokenInput19.Value)
+end)
+
+local Section = Tabs.PetList4:AddSection("Pet Slot 20")
+
+local PetInput20 = Tabs.PetList4:AddInput("PetInput20", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput20:OnChanged(function()
+	SelectedPet20 = PetInput20.Value or "None"
+end)
+
+local TokenInput20 = Tabs.PetList4:AddInput("MaxTokenInput20", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput20:OnChanged(function()
+	TokenValue20 = tonumber(TokenInput20.Value) or 10
+	print("Input updated:", TokenInput20.Value)
+end)
+
+local Section = Tabs.RareSnipe:AddSection("Rainbow/Rare Pets")
+
+Tabs.RareSnipe:AddParagraph({
+	Title = "Pre-defined Rare Pets by Category",
+	Content = "Select from predefined rare pet categories. More categories coming soon!"
+})
+
+local RainbowRarePetDropdown = Tabs.RareSnipe:AddDropdown("RainbowRarePetDropdown", {
+	Title = "Select Rainbow/Rare Pet",
+	Values = { "None", "Rainbow Dilophosaurus", "Rainbow Elephant", "Rainbow Birb", "Giant Scorpion","Blue Whale", "Festive Ice Golem" ,
+	Multi = false,
+	Default = "None"
+})
+
+RainbowRarePetDropdown:OnChanged(function(Value)
+	RainbowRarePet = Value
+	print("Selected rare pet:", RainbowRarePet)
+end)
+
+local RainbowRarePriceInput = Tabs.RareSnipe:AddInput("RainbowRarePriceInput", {
+	Title = "Max Token Price",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Price input changed:", Value)
+	end
+})
+
+RainbowRarePriceInput:OnChanged(function()
+	RainbowRareTokenValue = tonumber(RainbowRarePriceInput.Value) or 10
+	print("Rare pet token value updated:", RainbowRareTokenValue)
+end)
+
 
 
 
@@ -1820,36 +2146,36 @@ PetFinderToggle:OnChanged(function()
 					:WaitForChild("FindSellers")
 					:InvokeServer(unpack(args))
 
-				if not (not success or type(listingId) ~= "string") then
-					if not SeenListings[listingId] then
-						SeenListings[listingId] = true
-
-						Found = true
-						print("✅ MATCH FOUND! ListingId:", listingId)
-						print("Pet:", args[2].PetType, "| Weight:", args[2].PetData.BaseWeight * 10)
-
-						task.wait(5)
-						game:GetService("ReplicatedStorage")
-							:WaitForChild("GameEvents")
-							:WaitForChild("TradeEvents")
-							:WaitForChild("TokenRAPs")
-							:WaitForChild("TeleportToListing")
-							:InvokeServer(listingId)
-					else
-						print("⚠️ Already seen ListingId:", listingId)
-					end
-				else
+				if not success or type(listingId) ~= "string" then
 					print("Adjusted Weight:", StartingWeight)
-					if not (MinimumWeight == MaximumWeight or StartingWeight <= 0) then
-						if StartingWeight == MinimumWeight then
-							WeightStep = 0.1
-						elseif StartingWeight == MaximumWeight then
-							WeightStep = -0.1
-						end
-						StartingWeight = StartingWeight + WeightStep
-						StartingWeight = math.floor(StartingWeight * 10 + 0.5) / 10
+					if MinimumWeight == MaximumWeight or StartingWeight <= 0 then continue end
+					if StartingWeight == MinimumWeight then
+						WeightStep = 0.1
+					elseif StartingWeight == MaximumWeight then
+						WeightStep = -0.1
 					end
+					StartingWeight = StartingWeight + WeightStep
+					StartingWeight = math.floor(StartingWeight * 10 + 0.5) / 10
+					continue
 				end
+
+				if SeenListings[listingId] then
+					print("⚠️ Already seen ListingId:", listingId)
+					continue
+				end
+				SeenListings[listingId] = true
+
+				Found = true
+				print("✅ MATCH FOUND! ListingId:", listingId)
+				print("Pet:", args[2].PetType, "| Weight:", args[2].PetData.BaseWeight * 10)
+
+				task.wait(5)
+				game:GetService("ReplicatedStorage")
+					:WaitForChild("GameEvents")
+					:WaitForChild("TradeEvents")
+					:WaitForChild("TokenRAPs")
+					:WaitForChild("TeleportToListing")
+					:InvokeServer(listingId)
 			end
 		end)
 	else
