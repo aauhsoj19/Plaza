@@ -1265,8 +1265,8 @@ if UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled then
 end
 
 local Window = Fluent:CreateWindow({
-	Title = "Gag Plaza Sniper v1.3",
-	SubTitle = "by BigHead",
+	Title = "Gag Plaza Sniper v1.4",
+	SubTitle = "by Zhark",
 	TabWidth = 120,
 	Size = Screentype or UDim2.new(0.3, 0, 0.4, 0),
 	Acrylic = false,
@@ -1283,8 +1283,8 @@ local Tabs = {
 	Webhooks = Window:AddTab({ Title = "Webhooks", Icon = "eye" }),
 	PetList = Window:AddTab({ Title = "Pet List", Icon = "bone" }),
 	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon = "egg" }),
-	PetList3 = Window:AddTab({ Title = "Pet List 3", Icon = "fish" }),
-	PetList4 = Window:AddTab({ Title = "Pet List 4", Icon = "bird" }),
+	PetList3 = Window:AddTab({ Title = "Pet List 3", Icon = "star" }),
+	PetList4 = Window:AddTab({ Title = "Pet List 4", Icon = "heart" }),
 	PetFinder = Window:AddTab({ Title = "Pet Finder", Icon = "search" }),
 	Settings = Window:AddTab({ Title = "Settings", Icon = "cog" })
 }
@@ -1771,6 +1771,7 @@ TokenInput10:OnChanged(function()
 	print("Input updated:", TokenInput10.Value)
 end)
 
+-- Pet List 3
 local Section = Tabs.PetList3:AddSection("Pet Slot 11")
 
 Tabs.PetList3:AddParagraph({
@@ -1797,8 +1798,8 @@ local TokenInput11 = Tabs.PetList3:AddInput("MaxTokenInput11", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -1830,8 +1831,8 @@ local TokenInput12 = Tabs.PetList3:AddInput("MaxTokenInput12", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -1863,8 +1864,8 @@ local TokenInput13 = Tabs.PetList3:AddInput("MaxTokenInput13", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -1896,8 +1897,8 @@ local TokenInput14 = Tabs.PetList3:AddInput("MaxTokenInput14", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -1929,8 +1930,8 @@ local TokenInput15 = Tabs.PetList3:AddInput("MaxTokenInput15", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -1941,6 +1942,7 @@ TokenInput15:OnChanged(function()
 	print("Input updated:", TokenInput15.Value)
 end)
 
+-- Pet List 4
 local Section = Tabs.PetList4:AddSection("Pet Slot 16")
 
 Tabs.PetList4:AddParagraph({
@@ -1967,8 +1969,8 @@ local TokenInput16 = Tabs.PetList4:AddInput("MaxTokenInput16", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -2000,8 +2002,8 @@ local TokenInput17 = Tabs.PetList4:AddInput("MaxTokenInput17", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -2033,8 +2035,8 @@ local TokenInput18 = Tabs.PetList4:AddInput("MaxTokenInput18", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -2066,8 +2068,8 @@ local TokenInput19 = Tabs.PetList4:AddInput("MaxTokenInput19", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -2099,8 +2101,8 @@ local TokenInput20 = Tabs.PetList4:AddInput("MaxTokenInput20", {
 	Title = "Max Token Input",
 	Default = 10,
 	Placeholder = "Max Tokens",
-	Numeric = true, 
-	Finished = false, 
+	Numeric = true,
+	Finished = false,
 	Callback = function(Value)
 		print("Input changed:", Value)
 	end
@@ -2110,7 +2112,6 @@ TokenInput20:OnChanged(function()
 	TokenValue20 = tonumber(TokenInput20.Value) or 10
 	print("Input updated:", TokenInput20.Value)
 end)
-
 
 
 
