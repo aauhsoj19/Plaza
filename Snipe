@@ -1142,4 +1142,922 @@ local Tabs = {
 	Booth = Window:AddTab({ Title = "Booth", Icon = "shopping-cart" }),
 	Webhooks = Window:AddTab({ Title = "Webhooks", Icon = "eye" }),
 	PetList = Window:AddTab({ Title = "Pet List", Icon = "bone" }),
-	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon... (23 KB left)
+	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon = "egg" }),
+	PetFinder = Window:AddTab({ Title = "Pet Finder", Icon = "search" }),
+	Settings = Window:AddTab({ Title = "Settings", Icon = "cog" })
+}
+
+local Options = Fluent.Options
+
+do
+	Fluent:Notify({
+		Title = "Please Comment Any Suggestions in the discord",
+		Content = "Do it if you want updates.",
+		SubContent = "",
+		Duration = 10
+	})
+
+	local Section = Tabs.ServerHopping:AddSection("Server Hop Settings")
+
+	Tabs.ServerHopping:AddParagraph({
+		Title = "Time in Seconds Before ServerHopping",
+		Content = ""
+	})
+
+	local ServerHopToggle = Tabs.ServerHopping:AddToggle("ServerHopToggle", {Title = "Server Hop Toggle", Default = false })
+
+	Tabs.ServerHopping:AddParagraph({
+		Title = "To Re-enable the ServerHop/Change The Time",
+		Content = "toggle Sniper Toggle off and on again, after you have made the changes"
+	})
+
+	ServerHopToggle:OnChanged(function(value)
+		ServerHopOn = value
+	end)
+
+	local ServerHopInput = Tabs.ServerHopping:AddInput("ServerHopInput", {
+		Title = "ServerHop Input",
+		Default = 60,
+		Placeholder = "ServerHop Input",
+		Numeric = true, 
+		Finished = false,
+		Callback = function(Value)
+		end
+	})
+
+	ServerHopInput:OnChanged(function()
+		ServerhopInterval = tonumber(ServerHopInput.Value) or 60
+		print("Input updated:", ServerHopInput.Value)
+	end)
+
+	local Section = Tabs.ServerHopping:AddSection("Other")
+
+	local ReExecuteToggle = Tabs.ServerHopping:AddToggle("ReExecuteToggle", {Title = "Auto-Re-Execute", Default = false })
+
+	ReExecuteToggle:OnChanged(function()
+		ReExecute = ReExecuteToggle.Value
+	end)
+
+	local AntiAfkToggle = Tabs.ServerHopping:AddToggle("AntiAFKToggle", {Title = "Anti AFK Toggle", Default = true })
+
+	AntiAfkToggle:OnChanged(function()
+		local Player = game.Players.LocalPlayer
+		if AntiAfkToggle.Value == true then
+			local VirtualUser = game:GetService("VirtualUser")
+			if getconnections then
+				for _, connection in pairs(getconnections(Player.Idled)) do
+					if connection["Disable"] then
+						connection["Disable"](connection)
+					elseif connection["Disconnect"] then
+						connection["Disconnect"](connection)
+					end
+				end
+			else
+				Player.Idled:Connect(function()
+					VirtualUser:CaptureController()
+					VirtualUser:ClickButton2(Vector2.new())
+				end)
+			end
+			print("AFK")
+		end
+
+	end)
+	local AutoReconnectConnection
+
+
+	local AutoReconnectToggle = Tabs.ServerHopping:AddToggle("AutoReconnectToggle", {Title = "Auto Reconnect Toggle", Default = true })
+
+	AutoReconnectToggle:OnChanged(function()
+		local Player = game.Players.LocalPlayer
+		local JobId = game.JobId
+
+		if AutoReconnectConnection then
+			AutoReconnectConnection:Disconnect()
+			AutoReconnectConnection = nil
+			return
+		end
+
+
+		if AutoReconnectToggle.Value == true then
+			AutoReconnectConnection = GuiService.ErrorMessageChanged:Connect(function()
+				if #Players:GetPlayers() <= 1 then
+					Player:Kick("\nRejoining...")
+					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
+					wait()
+					TeleportService:Teleport(PlaceId, Player)
+				else
+					TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Player)
+					print("TP")
+				end
+
+			end)
+		end
+	end)
+
+
+
+	local Section = Tabs.Main:AddSection("Sniper and Other")
+
+	Tabs.Main:AddParagraph({
+		Title = "To Use The Sniper",
+		Content = "Toggle it on and enter the maximum price in pet list, along with the pet you want to snipe."
+	})
+
+
+	local SniperToggle = Tabs.Main:AddToggle("SniperToggle", {Title = "Sniper Toggle", Default = false })
+
+	SniperToggle:OnChanged(function(value)
+		SniperActive = value
+		if SniperActive then
+			task.spawn(function()
+				while SniperActive do
+					FindAllPets()
+					task.wait(5) 
+				end
+			end)
+
+			task.spawn(function()
+				while SniperActive do
+					task.wait(1)
+					if ServerHopOn == false then continue end
+					task.wait(ServerhopInterval or 10)
+					if ServerHopOn == false then continue end
+					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
+					pcall(ServerHop)
+				end
+			end)
+		end
+		print("Toggle changed:", Options.SniperToggle.Value)
+	end)
+
+	local Section = Tabs.PetList:AddSection("Pet Slot 1")
+
+	Tabs.PetList:AddParagraph({
+		Title = "Caps DO NOT MATTER",
+		Content = "Just make sure you spell it right."
+	})
+
+
+	local PetInput = Tabs.PetList:AddInput("PetInput", {
+		Title = "Pet Name Input",
+		Default = "None",
+		Placeholder = "Pet Name",
+		Numeric = false,
+		Finished = false,
+		Callback = function(Value)
+			print("Input changed:", Value)
+		end
+	})
+
+	PetInput:OnChanged(function()
+		SelectedPet = PetInput.Value or "None"
+	end)
+
+
+	local TokenInput1 = Tabs.PetList:AddInput("MaxTokenInput", {
+		Title = "Max Token Input",
+		Default = 10,
+		Placeholder = "Max Tokens",
+		Numeric = true, 
+		Finished = false, 
+		Callback = function(Value)
+			print("Input changed:", Value)
+		end
+	})
+
+	TokenInput1:OnChanged(function()
+		TokenValue = tonumber(TokenInput1.Value) or 10
+		print("Input updated:", TokenInput1.Value)
+	end)
+end
+
+local Section = Tabs.PetList:AddSection("Pet Slot 2")
+
+local PetInput2 = Tabs.PetList:AddInput("PetInput2", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput2:OnChanged(function()
+	SelectedPet2 = PetInput2.Value or "None"
+end)
+
+local TokenInput2 = Tabs.PetList:AddInput("MaxTokenInput2", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput2:OnChanged(function()
+	TokenValue2 = tonumber(TokenInput2.Value) or 10
+	print("Input updated:", TokenInput2.Value)
+end)
+
+local Section = Tabs.PetList:AddSection("Pet Slot 3")
+
+local PetInput3 = Tabs.PetList:AddInput("PetInput3", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput3:OnChanged(function()
+	SelectedPet3 = PetInput3.Value or "None"
+end)
+
+local TokenInput3 = Tabs.PetList:AddInput("MaxTokenInput3", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput3:OnChanged(function()
+	TokenValue3 = tonumber(TokenInput3.Value) or 10
+	print("Input updated:", TokenInput3.Value)
+end)
+
+local Section = Tabs.PetList:AddSection("Pet Slot 4")
+
+
+local PetInput4 = Tabs.PetList:AddInput("PetInput4", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput4:OnChanged(function()
+	SelectedPet4 = PetInput4.Value or "None"
+end)
+
+local TokenInput4 = Tabs.PetList:AddInput("MaxTokenInput4", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput4:OnChanged(function()
+	TokenValue4 = tonumber(TokenInput4.Value) or 10
+	print("Input updated:", TokenInput4.Value)
+end)
+
+local Section = Tabs.PetList:AddSection("Pet Slot 5")
+
+local PetInput5 = Tabs.PetList:AddInput("PetInput5", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput5:OnChanged(function()
+	SelectedPet5 = PetInput5.Value or "None"
+end)
+
+local TokenInput5 = Tabs.PetList:AddInput("MaxTokenInput5", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput5:OnChanged(function()
+	TokenValue5 = tonumber(TokenInput5.Value) or 10
+	print("Input updated:", TokenInput5.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 6")
+
+local PetInput6 = Tabs.PetList2:AddInput("PetInput6", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput6:OnChanged(function()
+	SelectedPet6 = PetInput6.Value or "None"
+end)
+
+local TokenInput6 = Tabs.PetList2:AddInput("MaxTokenInput6", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true, 
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput6:OnChanged(function()
+	TokenValue6 = tonumber(TokenInput6.Value) or 10
+	print("Input updated:", TokenInput6.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 7")
+
+local PetInput7 = Tabs.PetList2:AddInput("PetInput7", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput7:OnChanged(function()
+	SelectedPet7 = PetInput7.Value or "None"
+end)
+
+local TokenInput7 = Tabs.PetList2:AddInput("MaxTokenInput7", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput7:OnChanged(function()
+	TokenValue7 = tonumber(TokenInput7.Value) or 10
+	print("Input updated:", TokenInput7.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 8")
+
+local PetInput8 = Tabs.PetList2:AddInput("PetInput8", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput8:OnChanged(function()
+	SelectedPet8 = PetInput8.Value or "None"
+end)
+
+local TokenInput8 = Tabs.PetList2:AddInput("MaxTokenInput8", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput8:OnChanged(function()
+	TokenValue8 = tonumber(TokenInput8.Value) or 10
+	print("Input updated:", TokenInput8.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 9")
+
+local PetInput9 = Tabs.PetList2:AddInput("PetInput9", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false, 
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput9:OnChanged(function()
+	SelectedPet9 = PetInput9.Value or "None"
+end)
+
+local TokenInput9 = Tabs.PetList2:AddInput("MaxTokenInput9", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput9:OnChanged(function()
+	TokenValue9 = tonumber(TokenInput9.Value) or 10
+	print("Input updated:", TokenInput9.Value)
+end)
+
+local Section = Tabs.PetList2:AddSection("Pet Slot 10")
+
+local PetInput10 = Tabs.PetList2:AddInput("PetInput10", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+PetInput10:OnChanged(function()
+	SelectedPet10 = PetInput10.Value or "None"
+end)
+
+local TokenInput10 = Tabs.PetList2:AddInput("MaxTokenInput10", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+TokenInput10:OnChanged(function()
+	TokenValue10 = tonumber(TokenInput10.Value) or 10
+	print("Input updated:", TokenInput10.Value)
+end)
+
+
+
+
+local Section = Tabs.Webhooks:AddSection("Snipe Webhook")
+
+Tabs.Webhooks:AddParagraph({
+	Title = "Not how to use:",
+	Content = "Sup webhooks are here, have fun ill be updating them soon"
+})
+
+
+local SnipeWebhookToggle = Tabs.Webhooks:AddToggle("SnipeWebhookToggle", {Title = "Snipe Webhook Toggle", Default = false })
+
+SnipeWebhookToggle:OnChanged(function()
+	SnipeWebhook = SnipeWebhookToggle.Value
+end)
+
+local SnipeWebhookInput = Tabs.Webhooks:AddInput("SnipeWebhookInput", {
+	Title = "Snipe Webhook",
+	Default = "",
+	Placeholder = "https://discord.com/api/webhooks/{WEBHOOK_ID}/{WEBHOOK_TOKEN}",
+	Numeric = false,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+	SnipeWebhookInput:OnChanged(function()
+		SnipeWebhookInfo = SnipeWebhookInput.Value or nil
+	end)
+
+
+local Section = Tabs.Booth:AddSection("Booth Bot Settings")
+
+Tabs.Booth:AddParagraph({
+	Title = "How To Use",
+	Content = "Think of this like a Salesman agent that stands out, it will try and lure people to your booth with cool tricks, that will rapidly increase the amount of people that see your booth"
+})
+
+
+local CheckPlayerConn
+local BoothBotRunning = false
+
+local BoothBotToggle = Tabs.Booth:AddToggle("BoothBotToggle", {Title = "Booth Bot Toggle", Default = false })
+
+BoothBotToggle:OnChanged(function()
+	BoothBotRunning = BoothBotToggle.Value
+		if BoothBotRunning then
+			
+			CheckPlayerConn = game:GetService("RunService").Heartbeat:Connect(function()
+				GetClosestPlayers()
+			end)
+			
+			task.spawn(function()
+				while BoothBotRunning do
+					task.wait(5)
+					WalkToBooth()
+					task.wait(120)
+				end
+			end)
+			
+			task.spawn(function()
+				while BoothBotRunning do
+					Dance()
+					task.wait(10)
+				end
+			end)
+			
+			task.spawn(function()
+				while BoothBotRunning do
+					task.wait(0.05)
+					WaveAndHi()
+				end
+			end)
+		else
+			if CheckPlayerConn then
+				CheckPlayerConn:Disconnect()
+			end
+		end
+end)
+
+local FlexInterval = 20
+local FlexRunning = false
+
+local FlexPetsToggle = Tabs.Booth:AddToggle("FlexPetsToggle", {Title = "Flex Pets Toggle", Default = false })
+
+FlexPetsToggle:OnChanged(function()
+	FlexRunning = FlexPetsToggle.Value
+		if FlexRunning then
+			task.spawn(function()
+				while FlexRunning do
+					FlexOnNoobs()
+					task.wait(FlexInterval)
+				end
+			end)
+		end
+end)
+
+
+
+local FlexPetsSlider = Tabs.Booth:AddSlider("FlexPetsSlider", {
+	Title = "Flex Pets Cooldown",
+	Description = "Cooldown on flexing pets",
+	Default = 20,
+	Min = 0.1,
+	Max = 60,
+	Rounding = 1,
+	Callback = function(Value)
+		print("Slider was changed:", Value)
+	end
+})
+
+FlexPetsSlider:OnChanged(function(Value)
+	FlexInterval = tonumber(Value)
+end)
+
+local LureRunning
+local LureInterval = 30
+
+local LureToBoothToggle = Tabs.Booth:AddToggle("LureToBoothToggle", {Title = "Lure To Booth Toggle", Default = false })
+
+LureToBoothToggle:OnChanged(function()
+	LureRunning = LureToBoothToggle.Value
+		if LureRunning then
+			task.spawn(function()
+				while LureRunning do
+					task.wait(LureInterval)
+					PointAndWalk()
+				end
+			end)
+		end
+end)
+
+
+local LureToBoothSlider = Tabs.Booth:AddSlider("LureToBoothSlider", {
+	Title = "Lure To Booth Cooldown",
+	Description = "Cooldown on luring players to booth",
+	Default = 240,
+	Min = 30,
+	Max = 600,
+	Rounding = 1,
+	Callback = function(Value)
+		print("Slider was changed:", Value)
+	end
+})
+
+
+LureToBoothSlider:OnChanged(function(Value)
+	LureInterval = tonumber(Value)
+end)
+
+
+
+local Section = Tabs.PetFinder:AddSection("Misc")
+
+
+Tabs.PetFinder:AddParagraph({
+	Title = "How to use",
+	Content = "This will find a pet globally meeting kg, and pet type, if it finds it, it will automatically teleport to the pet. Even if serverhop is off this will tp to the seller (This shows in console)"
+})
+
+local PetFinderToggle = Tabs.PetFinder:AddToggle("PetFinderToggle", {Title = "Pet Finder Toggle", Default = false })
+
+PetFinderToggle:OnChanged(function()
+	local Running = PetFinderToggle.Value
+	if Running then
+		Found = false
+		task.spawn(function()
+			while Running do
+				task.wait(300)
+				SeenListings = {}
+				print("♻️ Cleared seen listings cache")
+			end
+		end)
+		task.spawn(function()
+			while Running do
+				if not ExoticPet1 then return end
+				task.wait(10)
+				args[2].PetData.BaseWeight = StartingWeight
+				print("🔍 Searching listings...")
+
+				local success, listingId = game:GetService("ReplicatedStorage")
+					:WaitForChild("GameEvents")
+					:WaitForChild("TradeEvents")
+					:WaitForChild("TokenRAPs")
+					:WaitForChild("FindSellers")
+					:InvokeServer(unpack(args))
+
+				if not success or type(listingId) ~= "string" then
+					print("Adjusted Weight:", StartingWeight)
+					if MinimumWeight == MaximumWeight or StartingWeight <= 0 then continue end
+					if StartingWeight == MinimumWeight then
+						WeightStep = 0.1
+					elseif StartingWeight == MaximumWeight then
+						WeightStep = -0.1
+					end
+					StartingWeight = StartingWeight + WeightStep
+					StartingWeight = math.floor(StartingWeight * 10 + 0.5) / 10
+					continue
+				end
+
+				if SeenListings[listingId] then
+					print("⚠️ Already seen ListingId:", listingId)
+					continue
+				end
+				SeenListings[listingId] = true
+
+				Found = true
+				print("✅ MATCH FOUND! ListingId:", listingId)
+				print("Pet:", args[2].PetType, "| Weight:", args[2].PetData.BaseWeight * 10)
+
+				task.wait(5)
+				game:GetService("ReplicatedStorage")
+					:WaitForChild("GameEvents")
+					:WaitForChild("TradeEvents")
+					:WaitForChild("TokenRAPs")
+					:WaitForChild("TeleportToListing")
+					:InvokeServer(listingId)
+			end
+		end)
+	else
+		Found = true
+	end
+
+end)
+
+local ConsoleToggle = Tabs.PetFinder:AddToggle("ConsoleToggle", {Title = "Console Toggle", Default = false })
+
+ConsoleToggle:OnChanged(function()
+end)
+
+
+local Section = Tabs.PetFinder:AddSection("Pet Finder 1")
+
+Tabs.PetFinder:AddParagraph({
+	Title = "CHECK THIS",
+	Content = "USE BASEWEIGHT FOR KG, Example: 5.5 = sniping 55kg max pet, IF YOU LEAVE AT 0 THEN IT WONT USE IT AND THATS FINE, AND THE PET NAME MUST BE RIGHT CAPS AND RIGHT SPELLING, EXAMPLE: cannot be kitsune, must be Kitsune, or Rainbow Dilophosaurus"
+})
+
+local ExoticPetInput1 = Tabs.PetFinder:AddInput("ExoticPetInput1", {
+	Title = "Pet Name Input",
+	Default = "None",
+	Placeholder = "Pet Name",
+	Numeric = false,
+	Finished = false, 
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+ExoticPetInput1:OnChanged(function()
+	ExoticPet1 = ExoticPetInput1.Value or "None"
+	args[2].PetType = ExoticPet1
+end)
+
+local ExoticTokenInput1 = Tabs.PetFinder:AddInput("ExoticTokenInput1", {
+	Title = "Max Token Input",
+	Default = 10,
+	Placeholder = "Max Tokens",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+ExoticTokenInput1:OnChanged(function()
+	ExoticToken1 = tonumber(ExoticTokenInput1.Value) or 10
+	print("Input updated:", ExoticTokenInput1.Value)
+end)
+
+local MinimumWeightInput1 = Tabs.PetFinder:AddInput("MinimumWeightInput1", {
+	Title = "Minimum Weight Input",
+	Default = 0,
+	Placeholder = "Minimum Weight",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+MinimumWeightInput1:OnChanged(function()
+	MinimumWeight = tonumber(MinimumWeightInput1.Value) or 0
+	print("Input updated:", MinimumWeightInput1.Value)
+end)
+
+local MaximumWeightInput1 = Tabs.PetFinder:AddInput("MaximumWeightInput1", {
+	Title = "Maximum Weight Input",
+	Default = 0,
+	Placeholder = "Maximum Weight",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Input changed:", Value)
+	end
+})
+
+MaximumWeightInput1:OnChanged(function()
+	MaximumWeight = tonumber(MaximumWeightInput1.Value) or 0
+	StartingWeight = MaximumWeight
+	print("Input updated:", MaximumWeightInput1.Value)
+end)
+
+
+local Section = Tabs.Misc:AddSection("Miscellanceous")
+
+local WalkspeedSlider = Tabs.Misc:AddSlider("Walkspeed Slider", {
+	Title = "Walkspeed Slider",
+	Description = "WalkSpeed",
+	Default = 16,
+	Min = 0,
+	Max = 500,
+	Rounding = 1,
+	Callback = function(Value)
+	end
+})
+
+
+WalkspeedSlider:OnChanged(function(Value)
+	Character.Humanoid.WalkSpeed = Value
+end)
+
+
+
+
+
+
+local Gui  = nil
+local Button = nil
+local LastPlace
+
+local Icon = RunService.Heartbeat:Connect(function()
+	if Window.Minimized == true and Gui == nil and Button == nil then
+
+
+		Gui = Instance.new("ScreenGui")
+		Gui.Name = "FloatingToggle"
+		Gui.ResetOnSpawn = false
+		Gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+		local ScreenType
+
+
+		Button = Instance.new("ImageButton")
+		if UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled then 
+			ScreenType = UDim2.fromOffset(35, 35)
+		else
+			ScreenType = UDim2.fromOffset(100, 100)
+		end
+		Button.Size = ScreenType
+		Button.Position = LastPlace or UDim2.fromScale(0.5, 0.5)
+		Button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+		Button.BorderSizePixel = 0
+		Button.Parent = Gui
+		Button.BackgroundTransparency = 0
+		Button.ScaleType = Enum.ScaleType.Fit
+		Button.Image = "rbxassetid://12169663385"
+		Button.ImageTransparency = 0
+
+
+		local Corner = Instance.new("UICorner")
+		Corner.CornerRadius = UDim.new(0.2, 0)
+		Corner.Parent = Button
+
+
+		local dragging = false
+		local dragStart, startPos
+
+		Button.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1
+				or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = true
+				dragStart = input.Position
+				startPos = Button.Position
+			end
+		end)
+
+		Button.InputEnded:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1
+				or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = false
+				Window:Minimize()
+			end
+		end)
+
+		UIS.InputChanged:Connect(function(input)
+			if dragging and (
+				input.UserInputType == Enum.UserInputType.MouseMovement
+					or input.UserInputType == Enum.UserInputType.Touch
+				) then
+				local delta = input.Position - dragStart
+				Button.Position = UDim2.new(
+					startPos.X.Scale,
+					startPos.X.Offset + delta.X,
+					startPos.Y.Scale,
+					startPos.Y.Offset + delta.Y
+				)
+				LastPlace = Button.Position
+			end
+		end)
+
+	elseif Window.Minimized == false and Gui and Button then
+		Gui:Destroy()
+		Button:Destroy()
+		Gui = nil
+		Button = nil
+
+	end
+
+end)
+
+
+SaveManager:SetLibrary(Fluent)
+InterfaceManager:SetLibrary(Fluent)
+
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+InterfaceManager:SetFolder("JourneyScriptHub")
+SaveManager:SetFolder("JourneyScriptHub/GagPlaza")
+InterfaceManager:BuildInterfaceSection(Tabs.Settings)
+SaveManager:BuildConfigSection(Tabs.Settings)
+
+
+Window:SelectTab("Main")
+
+Fluent:Notify({
+	Title = "Yo",
+	Content = "script loaded enjoy.",
+	Duration = 8
+})
+SaveManager:LoadAutoloadConfig()
