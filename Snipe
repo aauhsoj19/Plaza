@@ -1254,7 +1254,7 @@ do
 			AutoReconnectConnection = GuiService.ErrorMessageChanged:Connect(function()
 				if #Players:GetPlayers() <= 1 then
 					Player:Kick("\nRejoining...")
-					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
+					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/aauhsoj19/Plaza/refs/heads/main/Snipe', true))()") end
 					wait()
 					TeleportService:Teleport(PlaceId, Player)
 				else
@@ -1294,7 +1294,7 @@ do
 					if ServerHopOn == false then continue end
 					task.wait(ServerhopInterval or 10)
 					if ServerHopOn == false then continue end
-					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/romanbbeken-ux/GagPlazaSniperAutoJourneyHUB/refs/heads/main/AUTOGAGPLAZAJOURNEYHUBSNIPER', true))()") end
+					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/aauhsoj19/Plaza/refs/heads/main/Snipe', true))()") end
 					pcall(ServerHop)
 				end
 			end)
@@ -1643,73 +1643,151 @@ end)
 
 
 /**Added PetList 3**/
-task.spawn(function()
-    task.wait(2) -- ensure UI loads first
-
-    if Tabs and Tabs.PetList3 then
-        local Section = Tabs.PetList3:AddSection("Pet Slot 11")
-
-        local PetInput11 = Tabs.PetList3:AddInput("PetInput11", {
-            Title = "Pet Name Input",
-            Default = "None",
-            Numeric = false
-        })
-
-        PetInput11:OnChanged(function()
-            SelectedPet11 = PetInput11.Value or "None"
-        end)
-
-        local TokenInput11 = Tabs.PetList3:AddInput("MaxTokenInput11", {
-            Title = "Max Token Input",
-            Default = 10,
-            Numeric = true
-        })
-
-        TokenInput11:OnChanged(function()
-            TokenValue11 = tonumber(TokenInput11.Value) or 10
-        end)
-
-        for i = 12, 15 do
-            local section = Tabs.PetList3:AddSection("Pet Slot "..i)
-
-            local petInput = Tabs.PetList3:AddInput("PetInput"..i, {
-                Title = "Pet Name Input",
-                Default = "None",
-                Numeric = false
-            })
-
-            petInput:OnChanged(function()
-                _G["SelectedPet"..i] = petInput.Value or "None"
-            end)
-
-            local tokenInput = Tabs.PetList3:AddInput("MaxTokenInput"..i, {
-                Title = "Max Token Input",
-                Default = 10,
-                Numeric = true
-            })
-
-            tokenInput:OnChanged(function()
-                _G["TokenValue"..i] = tonumber(tokenInput.Value) or 10
-            end)
-        end
+local Section = Tabs.PetList3:AddSection("Pet Slot 11")
+local PetInput11 = Tabs.PetList3:AddInput("PetInput11", {
+    Title = "Pet Name Input",
+    Default = "None",
+    Placeholder = "Pet Name",
+    Numeric = false,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
     end
+})
+PetInput11:OnChanged(function()
+    SelectedPet11 = PetInput11.Value or "None"
 end)
-local function TryBuy(selectedPet, tokenValue)
-    if selectedPet and selectedPet ~= "None" and selectedPet:lower() == PetName:lower() and tokenValue and PetPrice <= tokenValue then
-        local ownerPlayer = Players:FindFirstChild(PlayerName)
-        if ownerPlayer then
-            pcall(function()
-                ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
-            end)
-        end
+local TokenInput11 = Tabs.PetList3:AddInput("MaxTokenInput11", {
+    Title = "Max Token Input",
+    Default = 10,
+    Placeholder = "Max Tokens",
+    Numeric = true,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
     end
-end
+})
+TokenInput11:OnChanged(function()
+    TokenValue11 = tonumber(TokenInput11.Value) or 10
+    print("Input updated:", TokenInput11.Value)
+end)
 
-TryBuy(SelectedPet11, TokenValue11)
-TryBuy(SelectedPet12, TokenValue12)
-TryBuy(SelectedPet13, TokenValue13)
-TryBuy(SelectedPet14, TokenValue14)
-TryBuy(SelectedPet15, TokenValue15)
+local Section = Tabs.PetList3:AddSection("Pet Slot 12")
+local PetInput12 = Tabs.PetList3:AddInput("PetInput12", {
+    Title = "Pet Name Input",
+    Default = "None",
+    Placeholder = "Pet Name",
+    Numeric = false,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+PetInput12:OnChanged(function()
+    SelectedPet12 = PetInput12.Value or "None"
+end)
+local TokenInput12 = Tabs.PetList3:AddInput("MaxTokenInput12", {
+    Title = "Max Token Input",
+    Default = 10,
+    Placeholder = "Max Tokens",
+    Numeric = true,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+TokenInput12:OnChanged(function()
+    TokenValue12 = tonumber(TokenInput12.Value) or 10
+    print("Input updated:", TokenInput12.Value)
+end)
+
+local Section = Tabs.PetList3:AddSection("Pet Slot 13")
+local PetInput13 = Tabs.PetList3:AddInput("PetInput13", {
+    Title = "Pet Name Input",
+    Default = "None",
+    Placeholder = "Pet Name",
+    Numeric = false,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+PetInput13:OnChanged(function()
+    SelectedPet13 = PetInput13.Value or "None"
+end)
+local TokenInput13 = Tabs.PetList3:AddInput("MaxTokenInput13", {
+    Title = "Max Token Input",
+    Default = 10,
+    Placeholder = "Max Tokens",
+    Numeric = true,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+TokenInput13:OnChanged(function()
+    TokenValue13 = tonumber(TokenInput13.Value) or 10
+    print("Input updated:", TokenInput13.Value)
+end)
+
+local Section = Tabs.PetList3:AddSection("Pet Slot 14")
+local PetInput14 = Tabs.PetList3:AddInput("PetInput14", {
+    Title = "Pet Name Input",
+    Default = "None",
+    Placeholder = "Pet Name",
+    Numeric = false,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+PetInput14:OnChanged(function()
+    SelectedPet14 = PetInput14.Value or "None"
+end)
+local TokenInput14 = Tabs.PetList3:AddInput("MaxTokenInput14", {
+    Title = "Max Token Input",
+    Default = 10,
+    Placeholder = "Max Tokens",
+    Numeric = true,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+TokenInput14:OnChanged(function()
+    TokenValue14 = tonumber(TokenInput14.Value) or 10
+    print("Input updated:", TokenInput14.Value)
+end)
+
+local Section = Tabs.PetList3:AddSection("Pet Slot 15")
+local PetInput15 = Tabs.PetList3:AddInput("PetInput15", {
+    Title = "Pet Name Input",
+    Default = "None",
+    Placeholder = "Pet Name",
+    Numeric = false,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+PetInput15:OnChanged(function()
+    SelectedPet15 = PetInput15.Value or "None"
+end)
+local TokenInput15 = Tabs.PetList3:AddInput("MaxTokenInput15", {
+    Title = "Max Token Input",
+    Default = 10,
+    Placeholder = "Max Tokens",
+    Numeric = true,
+    Finished = false,
+    Callback = function(Value)
+        print("Input changed:", Value)
+    end
+})
+TokenInput15:OnChanged(function()
+    TokenValue15 = tonumber(TokenInput15.Value) or 10
+    print("Input updated:", TokenInput15.Value)
+end)
+
 /**End of PetList 3 Addition**/
 
 local Section = Tabs.Webhooks:AddSection("Snipe Webhook")
@@ -2032,10 +2110,6 @@ local WalkspeedSlider = Tabs.Misc:AddSlider("Walkspeed Slider", {
 WalkspeedSlider:OnChanged(function(Value)
 	Character.Humanoid.WalkSpeed = Value
 end)
-
-
-
-
 
 
 local Gui  = nil
