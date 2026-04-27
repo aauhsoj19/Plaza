@@ -349,6 +349,12 @@ local SelectedPet7 = "None"
 local SelectedPet8 = "None"
 local SelectedPet9 = "None"
 local SelectedPet10 = "None"
+local SelectedPet11 = "None"
+local SelectedPet12 = "None"
+local SelectedPet13 = "None"
+local SelectedPet14 = "None"
+local SelectedPet15 = "None"
+
 local ExoticPet1 = "None"
 local TokenValue
 local TokenValue2
@@ -360,6 +366,11 @@ local TokenValue7
 local TokenValue8
 local TokenValue9
 local TokenValue10
+local TokenValue11
+local TokenValue12
+local TokenValue13
+local TokenValue14
+local TokenValue15
 local ExoticToken1
 
 local MinimumWeight = 1
@@ -1125,8 +1136,8 @@ if UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled then
 end
 
 local Window = Fluent:CreateWindow({
-	Title = "Gag Plaza Sniper v1.3",
-	SubTitle = "by BigHead",
+	Title = "Gag Plaza Sniper v1.4",
+	SubTitle = "by BigHead/Zhark",
 	TabWidth = 120,
 	Size = Screentype or UDim2.new(0.3, 0, 0.4, 0),
 	Acrylic = false,
@@ -1143,6 +1154,7 @@ local Tabs = {
 	Webhooks = Window:AddTab({ Title = "Webhooks", Icon = "eye" }),
 	PetList = Window:AddTab({ Title = "Pet List", Icon = "bone" }),
 	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon = "egg" }),
+    PetList3 = Window:AddTab({ Title = "Pet List 3", Icon = "layers" }),
 	PetFinder = Window:AddTab({ Title = "Pet Finder", Icon = "search" }),
 	Settings = Window:AddTab({ Title = "Settings", Icon = "cog" })
 }
@@ -1630,7 +1642,75 @@ TokenInput10:OnChanged(function()
 end)
 
 
+/**Added PetList 3**/
+task.spawn(function()
+    task.wait(2) -- ensure UI loads first
 
+    if Tabs and Tabs.PetList3 then
+        local Section = Tabs.PetList3:AddSection("Pet Slot 11")
+
+        local PetInput11 = Tabs.PetList3:AddInput("PetInput11", {
+            Title = "Pet Name Input",
+            Default = "None",
+            Numeric = false
+        })
+
+        PetInput11:OnChanged(function()
+            SelectedPet11 = PetInput11.Value or "None"
+        end)
+
+        local TokenInput11 = Tabs.PetList3:AddInput("MaxTokenInput11", {
+            Title = "Max Token Input",
+            Default = 10,
+            Numeric = true
+        })
+
+        TokenInput11:OnChanged(function()
+            TokenValue11 = tonumber(TokenInput11.Value) or 10
+        end)
+
+        for i = 12, 15 do
+            local section = Tabs.PetList3:AddSection("Pet Slot "..i)
+
+            local petInput = Tabs.PetList3:AddInput("PetInput"..i, {
+                Title = "Pet Name Input",
+                Default = "None",
+                Numeric = false
+            })
+
+            petInput:OnChanged(function()
+                _G["SelectedPet"..i] = petInput.Value or "None"
+            end)
+
+            local tokenInput = Tabs.PetList3:AddInput("MaxTokenInput"..i, {
+                Title = "Max Token Input",
+                Default = 10,
+                Numeric = true
+            })
+
+            tokenInput:OnChanged(function()
+                _G["TokenValue"..i] = tonumber(tokenInput.Value) or 10
+            end)
+        end
+    end
+end)
+local function TryBuy(selectedPet, tokenValue)
+    if selectedPet and selectedPet ~= "None" and selectedPet:lower() == PetName:lower() and tokenValue and PetPrice <= tokenValue then
+        local ownerPlayer = Players:FindFirstChild(PlayerName)
+        if ownerPlayer then
+            pcall(function()
+                ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
+            end)
+        end
+    end
+end
+
+TryBuy(SelectedPet11, TokenValue11)
+TryBuy(SelectedPet12, TokenValue12)
+TryBuy(SelectedPet13, TokenValue13)
+TryBuy(SelectedPet14, TokenValue14)
+TryBuy(SelectedPet15, TokenValue15)
+/**End of PetList 3 Addition**/
 
 local Section = Tabs.Webhooks:AddSection("Snipe Webhook")
 
@@ -2061,113 +2141,3 @@ Fluent:Notify({
 	Duration = 8
 })
 SaveManager:LoadAutoloadConfig()
--- =========================
--- [MODIFIED 2026-04-26]
--- Version update (OLD PRESERVED BELOW)
--- OLD: Title = "Gag Plaza Sniper v1.3"
-Title = "Gag Plaza Sniper v1.4"
--- =========================
-
-
--- =========================
--- [ADDED 2026-04-26]
--- Pet List 3 Tab
--- =========================
--- NOTE: You may need to manually place this inside your Tabs table if required
-PetList3 = Window:AddTab({ Title = "Pet List 3", Icon = "layers" })
-
-
--- =========================
--- [ADDED 2026-04-26]
--- Variables for Slots 11–15
--- =========================
-local SelectedPet11 = "None"
-local SelectedPet12 = "None"
-local SelectedPet13 = "None"
-local SelectedPet14 = "None"
-local SelectedPet15 = "None"
-
-local TokenValue11
-local TokenValue12
-local TokenValue13
-local TokenValue14
-local TokenValue15
-
-
--- =========================
--- [ADDED 2026-04-26]
--- UI for Pet List 3
--- =========================
-task.spawn(function()
-    task.wait(2) -- ensure UI loads first
-
-    if Tabs and Tabs.PetList3 then
-        local Section = Tabs.PetList3:AddSection("Pet Slot 11")
-
-        local PetInput11 = Tabs.PetList3:AddInput("PetInput11", {
-            Title = "Pet Name Input",
-            Default = "None",
-            Numeric = false
-        })
-
-        PetInput11:OnChanged(function()
-            SelectedPet11 = PetInput11.Value or "None"
-        end)
-
-        local TokenInput11 = Tabs.PetList3:AddInput("MaxTokenInput11", {
-            Title = "Max Token Input",
-            Default = 10,
-            Numeric = true
-        })
-
-        TokenInput11:OnChanged(function()
-            TokenValue11 = tonumber(TokenInput11.Value) or 10
-        end)
-
-        for i = 12, 15 do
-            local section = Tabs.PetList3:AddSection("Pet Slot "..i)
-
-            local petInput = Tabs.PetList3:AddInput("PetInput"..i, {
-                Title = "Pet Name Input",
-                Default = "None",
-                Numeric = false
-            })
-
-            petInput:OnChanged(function()
-                _G["SelectedPet"..i] = petInput.Value or "None"
-            end)
-
-            local tokenInput = Tabs.PetList3:AddInput("MaxTokenInput"..i, {
-                Title = "Max Token Input",
-                Default = 10,
-                Numeric = true
-            })
-
-            tokenInput:OnChanged(function()
-                _G["TokenValue"..i] = tonumber(tokenInput.Value) or 10
-            end)
-        end
-    end
-end)
-
-
--- =========================
--- [ADDED 2026-04-26]
--- Buy Logic Extension (Slots 11–15)
--- =========================
-local function TryBuy(selectedPet, tokenValue)
-    if selectedPet and selectedPet ~= "None" and selectedPet:lower() == PetName:lower() and tokenValue and PetPrice <= tokenValue then
-        local ownerPlayer = Players:FindFirstChild(PlayerName)
-        if ownerPlayer then
-            pcall(function()
-                ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
-            end)
-        end
-    end
-end
-
-TryBuy(SelectedPet11, TokenValue11)
-TryBuy(SelectedPet12, TokenValue12)
-TryBuy(SelectedPet13, TokenValue13)
-TryBuy(SelectedPet14, TokenValue14)
-TryBuy(SelectedPet15, TokenValue15)
