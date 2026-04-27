@@ -1286,7 +1286,7 @@ local Tabs = {
 	PetList = Window:AddTab({ Title = "Pet List", Icon = "bone" }),
 	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon = "egg" }),
     PetList3 = Window:AddTab({ Title = "Pet List 3", Icon = "layers" }),
-    PetList4 = Window:AddTab({ Title = "Pet List 4", Icon = "list" }),
+    PetList4 = Window:AddTab({ Title = "Pet List 4", Icon = "egg" }),
 	PetFinder = Window:AddTab({ Title = "Pet Finder", Icon = "search" }),
 	Settings = Window:AddTab({ Title = "Settings", Icon = "cog" })
 }
