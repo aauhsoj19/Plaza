@@ -1702,8 +1702,6 @@ TokenInput10:OnChanged(function()
 	print("Input updated:", TokenInput10.Value)
 end)
 
-
-/**Added PetList 3**/
 local Section = Tabs.PetList3:AddSection("Pet Slot 11")
 local PetInput11 = Tabs.PetList3:AddInput("PetInput11", {
     Title = "Pet Name Input",
@@ -1849,7 +1847,6 @@ TokenInput15:OnChanged(function()
     print("Input updated:", TokenInput15.Value)
 end)
 
-/**End of PetList 3 Addition**/
 
 local Section = Tabs.Webhooks:AddSection("Snipe Webhook")
 
