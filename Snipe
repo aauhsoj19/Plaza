@@ -2388,7 +2388,7 @@ end)
 
 local CategoryDropdown = Tabs.EggHunter:AddDropdown("CategoryDropdown", {
 	Title = "Egg Categories",
-	Values = {"Paradise", "Rare Summer Egg", "Zen Egg"},
+	Values = {"Paradise", "Rare Summer Egg", "Zen Egg", "Night Egg"},
 	Multi = true,
 	Default = {},
 })
