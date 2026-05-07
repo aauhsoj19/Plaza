@@ -373,6 +373,18 @@ local TokenValue14
 local TokenValue15
 local ExoticToken1
 
+-- Egg Hunter variables
+local EggHunterActive = false
+local EggHunterTokenThreshold = 10
+local SelectedEggCategories = {}
+
+local EggCategories = {
+	["Paradise"] = {"Peacock", "Scarlet Macaw", "Capybara", "Mimic Octopus", "Ostrich"},
+	["Rare Summer Egg"] = {"Sea Turtle", "Seal", "Orangutan", "Flamingo", "Toucan"},
+	["Zen Egg"] = {"Tanuki", "Shiba Inu", "Kitsune", "Nihonzaru", "Tanchozuru", "Kappa"},
+    ["Night Egg"] = {"Hedgehog", "Mole", "Frog", "Echo Frog", "Night Owl", "Raccoon"}
+}
+
 local MinimumWeight = 1
 local MaximumWeight = 1
 local StartingWeight = MaximumWeight
@@ -623,6 +635,23 @@ local function BuyPet()
 
 end
 
+
+local function BuyEggPet()
+	if not PetPrice or not PetName or not PetListingID or not PlayerName then return end
+
+	local ownerPlayer = Players:FindFirstChild(PlayerName)
+	if ownerPlayer then
+		local success, err = pcall(function()
+			ReplicatedStorage.GameEvents.TradeEvents.Booths.BuyListing:InvokeServer(ownerPlayer, PetListingID)
+		end)
+		if not success then
+			warn("Failed to buy egg pet:", err)
+		else
+			print(string.format("[Egg Hunter] Successfully bought %s for %s tokens", PetName, PetPrice))
+		end
+	end
+end
+
 -- FindAllPets function
 local function FindAllPets()
 	if not SniperActive then return end
@@ -666,6 +695,67 @@ local function FindAllPets()
 					listingID,
 					listingData.Price
 					))
+			end
+		end
+	end
+end
+
+
+local function FindEggPets()
+	if not EggHunterActive or #SelectedEggCategories == 0 then return end
+
+	for _, boothInfo in pairs(data.Booths) do
+		task.wait(0.05)
+		local ownerId = boothInfo.Owner
+		if not ownerId or not data.Players[ownerId] then continue end
+
+		local ownerPlayer = TradeBoothData.getPlayerById(ownerId)
+		if not ownerPlayer then continue end
+
+		local playerListings = data.Players[ownerId].Listings
+		if not playerListings then continue end
+
+		local playerItems = data.Players[ownerId].Items
+		if not playerItems then continue end
+
+		for listingID, listingData in pairs(playerListings) do
+			task.wait(0.01)
+			if listingData.ItemType == "Pet" then
+				local petData = playerItems[listingData.ItemId]
+				if not petData then continue end
+
+				local petName = petData.PetType or petData.Name or "Unknown Pet"
+
+				-- Check if pet is in selected categories
+				local isInCategory = false
+				for _, category in ipairs(SelectedEggCategories) do
+					if EggCategories[category] then
+						for _, eggPet in ipairs(EggCategories[category]) do
+							if string.lower(petName) == string.lower(eggPet) then
+								isInCategory = true
+								break
+							end
+						end
+						if isInCategory then break end
+					end
+				end
+
+				if isInCategory then
+					PetUUID = listingData.ItemId
+					PlayerName = ownerPlayer.Name
+					PetPrice = listingData.Price
+					PetName = petName
+					PetListingID = listingID
+
+					BuyEggPet()
+
+					print(string.format(
+						"[Egg Hunter] Owner: %s | Pet: %s | Price: %s",
+						ownerPlayer.Name,
+						petName,
+						listingData.Price
+						))
+				end
 			end
 		end
 	end
@@ -1217,6 +1307,7 @@ local Tabs = {
 	PetList2 = Window:AddTab({ Title = "Pet List 2", Icon = "egg" }),
     PetList3 = Window:AddTab({ Title = "Pet List 3", Icon = "layers" }),
 	PetFinder = Window:AddTab({ Title = "Pet Finder", Icon = "search" }),
+	EggHunter = Window:AddTab({ Title = "Egg Hunter", Icon = "target" }),
 	Settings = Window:AddTab({ Title = "Settings", Icon = "cog" })
 }
 
@@ -2251,6 +2342,60 @@ local Icon = RunService.Heartbeat:Connect(function()
 
 	end
 
+end)
+
+
+-- Egg Hunter Tab
+local Section = Tabs.EggHunter:AddSection("Egg Hunter Settings")
+
+Tabs.EggHunter:AddParagraph({
+	Title = "How it works",
+	Content = "Select egg categories and set token threshold. When tokens are below threshold, it will automatically buy pets from selected categories."
+})
+
+local EggHunterToggle = Tabs.EggHunter:AddToggle("EggHunterToggle", {Title = "Egg Hunter Toggle", Default = false })
+
+EggHunterToggle:OnChanged(function(value)
+	EggHunterActive = value
+	if EggHunterActive then
+		task.spawn(function()
+			while EggHunterActive do
+				local currentTokens = tonumber(game.Players.LocalPlayer:WaitForChild("PlayerGui").TradeTokenCurrency_UI.TradeTokens.TextLabel1.Text) or 0
+				if currentTokens <= EggHunterTokenThreshold then
+					FindEggPets()
+				end
+				task.wait(5)
+			end
+		end)
+	end
+end)
+
+local TokenThresholdInput = Tabs.EggHunter:AddInput("TokenThresholdInput", {
+	Title = "Token Threshold",
+	Default = 10,
+	Placeholder = "Max tokens before buying",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Token threshold changed:", Value)
+	end
+})
+
+TokenThresholdInput:OnChanged(function()
+	EggHunterTokenThreshold = tonumber(TokenThresholdInput.Value) or 10
+	print("Token threshold updated:", TokenThresholdInput.Value)
+end)
+
+local CategoryDropdown = Tabs.EggHunter:AddDropdown("CategoryDropdown", {
+	Title = "Egg Categories",
+	Values = {"Paradise", "Rare Summer Egg", "Zen Egg"},
+	Multi = true,
+	Default = {},
+})
+
+CategoryDropdown:OnChanged(function(value)
+	SelectedEggCategories = value
+	print("Selected categories:", table.concat(SelectedEggCategories, ", "))
 end)
 
 
