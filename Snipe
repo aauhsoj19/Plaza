@@ -1287,7 +1287,7 @@ if UIS.TouchEnabled and not UIS.KeyboardEnabled and not UIS.MouseEnabled then
 end
 
 local Window = Fluent:CreateWindow({
-	Title = "Gag Plaza Sniper v1.4",
+	Title = "Gag Plaza Sniper v1.5",
 	SubTitle = "by BigHead/Zhark",
 	TabWidth = 120,
 	Size = Screentype or UDim2.new(0.3, 0, 0.4, 0),
