@@ -411,37 +411,37 @@ local SelectedPet29 = "None"
 local SelectedPet30 = "None"
 
 local ExoticPet1 = "None"
-local TokenValue
-local TokenValue2
-local TokenValue3
-local TokenValue4
-local TokenValue5
-local TokenValue6
-local TokenValue7
-local TokenValue8
-local TokenValue9
-local TokenValue10
-local TokenValue11
-local TokenValue12
-local TokenValue13
-local TokenValue14
-local TokenValue15
-local TokenValue16
-local TokenValue17
-local TokenValue18
-local TokenValue19
-local TokenValue20
-local TokenValue21
-local TokenValue22
-local TokenValue23
-local TokenValue24
-local TokenValue25
-local TokenValue26
-local TokenValue27
-local TokenValue28
-local TokenValue29
-local TokenValue30
-local ExoticToken1
+local TokenValue = 10
+local TokenValue2 = 10
+local TokenValue3 = 10
+local TokenValue4 = 10
+local TokenValue5 = 10
+local TokenValue6 = 10
+local TokenValue7 = 10
+local TokenValue8 = 10
+local TokenValue9 = 10
+local TokenValue10 = 10
+local TokenValue11 = 10
+local TokenValue12 = 10
+local TokenValue13 = 10
+local TokenValue14 = 10
+local TokenValue15 = 10
+local TokenValue16 = 10
+local TokenValue17 = 10
+local TokenValue18 = 10
+local TokenValue19 = 10
+local TokenValue20 = 10
+local TokenValue21 = 10
+local TokenValue22 = 10
+local TokenValue23 = 10
+local TokenValue24 = 10
+local TokenValue25 = 10
+local TokenValue26 = 10
+local TokenValue27 = 10
+local TokenValue28 = 10
+local TokenValue29 = 10
+local TokenValue30 = 10
+local ExoticToken1 = 10
 
 -- Egg Hunter variables
 local EggHunterActive = false
