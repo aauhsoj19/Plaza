@@ -317,6 +317,46 @@ local function ServerHop()
 	ServerHop()
 end
 
+local function ReconnectToTradingWorld()
+	local cursor = ""
+
+	while true do
+		local url = "https://games.roblox.com/v1/games/" .. PlaceId .. "/servers/Public?sortOrder=Asc&limit=100"
+		if cursor ~= "" then
+			url = url .. "&cursor=" .. cursor
+		end
+
+		local success, response = pcall(function()
+			return game:HttpGet(url)
+		end)
+
+		if not success then
+			warn("ReconnectToTradingWorld: failed to fetch server list, retrying...")
+			task.wait(5)
+			cursor = ""
+		else
+			local data = HttpService:JSONDecode(response)
+			for _, server in ipairs(data.data) do
+				if server.id ~= game.JobId and server.playing < server.maxPlayers then
+					print("ReconnectToTradingWorld: teleporting to server", server.id)
+					TeleportService:TeleportToPlaceInstance(PlaceId, server.id, LocalPlayer)
+					return
+				end
+			end
+
+			if not data.nextPageCursor then
+				break
+			end
+
+			cursor = data.nextPageCursor
+		end
+	end
+
+	warn("ReconnectToTradingWorld: no alternate server found, retrying in 10 seconds...")
+	task.wait(10)
+	ReconnectToTradingWorld()
+end
+
 
 
 
@@ -1434,17 +1474,29 @@ do
 
 
 		if AutoReconnectToggle.Value == true then
-			AutoReconnectConnection = GuiService.ErrorMessageChanged:Connect(function()
+			AutoReconnectConnection = GuiService.ErrorMessageChanged:Connect(function(errorMessage)
+				local lowerMessage = type(errorMessage) == "string" and string.lower(errorMessage) or ""
+				local shouldReconnect = false
+
 				if #Players:GetPlayers() <= 1 then
-					Player:Kick("\nRejoining...")
-					if ReExecute == true then queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/aauhsoj19/Plaza/refs/heads/main/Snipe', true))()") end
-					wait()
-					TeleportService:Teleport(PlaceId, Player)
-				else
-					TeleportService:TeleportToPlaceInstance(PlaceId, JobId, Player)
-					print("TP")
+					shouldReconnect = true
 				end
 
+				if string.find(lowerMessage, "kicked")
+					or string.find(lowerMessage, "disconnected")
+					or string.find(lowerMessage, "teleport")
+					or string.find(lowerMessage, "server") then
+					shouldReconnect = true
+				end
+
+				if shouldReconnect then
+					if ReExecute == true then
+						queue_on_teleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/aauhsoj19/Plaza/refs/heads/main/Snipe', true))()")
+					end
+					warn("AutoReconnect: Reconnecting to another trading world...")
+					task.wait(0.5)
+					ReconnectToTradingWorld()
+				end
 			end)
 		end
 	end)
