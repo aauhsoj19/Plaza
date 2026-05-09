@@ -377,12 +377,25 @@ local ExoticToken1
 local EggHunterActive = false
 local EggHunterTokenThreshold = 10
 local SelectedEggCategories = {}
+local PremiumHatchedEnabled = false
+local SemiPremiumHatchedEnabled = false
 
 local EggCategories = {
 	["Paradise"] = {"Peacock", "Scarlet Macaw", "Capybara", "Mimic Octopus", "Ostrich"},
 	["Rare Summer Egg"] = {"Sea Turtle", "Seal", "Orangutan", "Flamingo", "Toucan"},
 	["Zen Egg"] = {"Tanuki", "Shiba Inu", "Kitsune", "Nihonzaru", "Tanchozuru", "Kappa"},
-    ["Night Egg"] = {"Hedgehog", "Mole", "Frog", "Echo Frog", "Night Owl", "Raccoon"}
+    ["Night Egg"] = {"Hedgehog", "Mole", "Frog", "Echo Frog", "Night Owl", "Raccoon"},
+    ["Premium Hatched Pets"] = {"Rainbow Dilophosaurus", "Rainbow Elephant", "Giant Scorpion", "Rainbow Birb"},
+    ["Semi-Premium Hatched Pets"] = {"Rainbow Spinosaurus", "Rainbow Magpie", "Rainbow Bearded Dragon", "Festive Ice Golem", "Ghostly Spider", "Ghostly Headless Horseman", "Blue Whale", "Albino Peacock", "Rainbow Phoenix", "Rainbow Hotdog Daschund", "Rainbow Lobster Thermidor", "Rainbow Ankylosaurus", "Calico", "Festive Wendigo", "Volcano"}
+}
+
+local EggCategoryTokenThresholds = {
+	["Paradise"] = 10,
+	["Rare Summer Egg"] = 10,
+	["Zen Egg"] = 10,
+	["Night Egg"] = 10,
+	["Premium Hatched Pets"] = 10,
+	["Semi-Premium Hatched Pets"] = 10
 }
 
 local MinimumWeight = 1
@@ -702,7 +715,7 @@ end
 
 
 local function FindEggPets()
-	if not EggHunterActive or #SelectedEggCategories == 0 then return end
+	if not EggHunterActive or (#SelectedEggCategories == 0 and not PremiumHatchedEnabled and not SemiPremiumHatchedEnabled) then return end
 
 	for _, boothInfo in pairs(data.Booths) do
 		task.wait(0.05)
@@ -726,35 +739,53 @@ local function FindEggPets()
 
 				local petName = petData.PetType or petData.Name or "Unknown Pet"
 
-				-- Check if pet is in selected categories
-				local isInCategory = false
+				-- Build effective category list, including separate premium selections
+				local effectiveCategories = {}
 				for _, category in ipairs(SelectedEggCategories) do
 					if EggCategories[category] then
-						for _, eggPet in ipairs(EggCategories[category]) do
-							if string.lower(petName) == string.lower(eggPet) then
-								isInCategory = true
-								break
-							end
-						end
-						if isInCategory then break end
+						table.insert(effectiveCategories, category)
 					end
 				end
+				if PremiumHatchedEnabled then
+					table.insert(effectiveCategories, "Premium Hatched Pets")
+				end
+				if SemiPremiumHatchedEnabled then
+					table.insert(effectiveCategories, "Semi-Premium Hatched Pets")
+				end
 
-				if isInCategory then
+				-- Check if pet is in the effective categories
+				local matchedCategory
+				for _, category in ipairs(effectiveCategories) do
+					for _, eggPet in ipairs(EggCategories[category]) do
+						if string.lower(petName) == string.lower(eggPet) then
+							matchedCategory = category
+							break
+						end
+					end
+					if matchedCategory then break end
+				end
+
+				if matchedCategory then
+					-- Update pet info from current listing
 					PetUUID = listingData.ItemId
 					PlayerName = ownerPlayer.Name
 					PetPrice = listingData.Price
 					PetName = petName
 					PetListingID = listingID
+					
+					-- Check price against category threshold
+					local categoryThreshold = EggCategoryTokenThresholds[matchedCategory] or EggHunterTokenThreshold
+					if PetPrice <= categoryThreshold then
+						BuyEggPet()
 
-					BuyEggPet()
-
-					print(string.format(
-						"[Egg Hunter] Owner: %s | Pet: %s | Price: %s",
-						ownerPlayer.Name,
-						petName,
-						listingData.Price
-						))
+						print(string.format(
+							"[Egg Hunter] Owner: %s | Pet: %s | Price: %s | Category: %s",
+							ownerPlayer.Name,
+							petName,
+							listingData.Price,
+							matchedCategory
+							))
+					end
 				end
 			end
 		end
@@ -2396,6 +2427,58 @@ local CategoryDropdown = Tabs.EggHunter:AddDropdown("CategoryDropdown", {
 CategoryDropdown:OnChanged(function(value)
 	SelectedEggCategories = value
 	print("Selected categories:", table.concat(SelectedEggCategories, ", "))
+end)
+
+Tabs.EggHunter:AddParagraph({
+	Title = "Premium Hatched Pets",
+	Content = "Rainbow Dilophosaurus, Rainbow Elephant, Giant Scorpion, Rainbow Birb"
+})
+
+local PremiumToggle = Tabs.EggHunter:AddToggle("PremiumHatchedToggle", {Title = "Enable Premium Hatched Pets", Default = false })
+PremiumToggle:OnChanged(function(value)
+	PremiumHatchedEnabled = value
+end)
+
+local PremiumThresholdInput = Tabs.EggHunter:AddInput("PremiumThresholdInput", {
+	Title = "Premium Hatched Max Tokens",
+	Default = 10,
+	Placeholder = "Premium threshold",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Premium threshold changed:", Value)
+	end
+})
+
+PremiumThresholdInput:OnChanged(function()
+	EggCategoryTokenThresholds["Premium Hatched Pets"] = tonumber(PremiumThresholdInput.Value) or 10
+	print("Premium threshold updated:", PremiumThresholdInput.Value)
+end)
+
+Tabs.EggHunter:AddParagraph({
+	Title = "Semi-Premium Hatched Pets",
+	Content = "Rainbow Spinosaurus, Rainbow Magpie, Rainbow Bearded Dragon, Festive Ice Golem, Ghostly Spider, Ghostly Headless Horseman, Blue Whale, Albino Peacock, Rainbow Phoenix, Rainbow Hotdog Daschund, Rainbow Lobster Thermidor, Rainbow Ankylosaurus, Calico, Festive Wendigo, Volcano"
+})
+
+local SemiPremiumToggle = Tabs.EggHunter:AddToggle("SemiPremiumHatchedToggle", {Title = "Enable Semi-Premium Hatched Pets", Default = false })
+SemiPremiumToggle:OnChanged(function(value)
+	SemiPremiumHatchedEnabled = value
+end)
+
+local SemiPremiumThresholdInput = Tabs.EggHunter:AddInput("SemiPremiumThresholdInput", {
+	Title = "Semi-Premium Hatched Max Tokens",
+	Default = 10,
+	Placeholder = "Semi-Premium threshold",
+	Numeric = true,
+	Finished = false,
+	Callback = function(Value)
+		print("Semi-Premium threshold changed:", Value)
+	end
+})
+
+SemiPremiumThresholdInput:OnChanged(function()
+	EggCategoryTokenThresholds["Semi-Premium Hatched Pets"] = tonumber(SemiPremiumThresholdInput.Value) or 10
+	print("Semi-Premium threshold updated:", SemiPremiumThresholdInput.Value)
 end)
 
 
